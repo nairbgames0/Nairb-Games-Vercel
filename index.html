@@ -888,16 +888,21 @@
                         <!-- =================================================================== -->
 <!-- Contenedor general que agrupa el reproductor y su título/descripción inferior -->
 <div class="space-y-3">
-    <!-- Reproductor de video (se mantiene igual tu ruta y configuración) -->
-    <video
-        controls
-        preload="metadata"
-        class="w-full max-h-[480px] bg-black border border-emerald-500/40 shadow-[0_0_25px_rgba(0,255,102,0.2)]"
-    >
-        <!-- PON AQUÍ LA RUTA O ENLACE DE TU VIDEO DE INSTALACIÓN -->
-        <source src="Videos/Tutorial Programa Principal.mp4" type="video/mp4">
-        Tu navegador no soporta la reproducción de video HTML5.
-    </video>
+
+<!-- Reproductor de video mediante enlace de inserción (embed) de YouTube -->
+<div class="w-full aspect-video max-h-[480px] bg-black border border-emerald-500/40 shadow-[0_0_25px_rgba(0,255,102,0.2)] overflow-hidden">
+    <!-- Incluye referrerpolicy para que YouTube reconozca el origen al subirlo a Vercel/web -->
+    <iframe 
+        class="w-full h-full"
+        src="https://www.youtube.com/embed/wJWVidQYqsk" 
+        title="Tutorial Programa Principal" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen>
+    </iframe>
+</div>
+
 
     <!-- =================================================================== -->
     <!-- TÍTULO Y PEQUEÑA DESCRIPCIÓN EN LA PARTE INFERIOR DEL VIDEO         -->
@@ -921,17 +926,19 @@
                         
 <!-- Contenedor general que agrupa el reproductor y su título/descripción inferior -->
 <div class="space-y-3">
-    <!-- Reproductor de video (se mantiene igual tu ruta y configuración) -->
-    <video
-        controls
-        preload="metadata"
-        class="w-full max-h-[480px] bg-black border border-emerald-500/40 shadow-[0_0_25px_rgba(0,255,102,0.2)]"
-    >
-        <!-- PON AQUÍ LA RUTA O ENLACE DE TU VIDEO DE INSTALACIÓN -->
-        <source src="Videos/tutorial descagar de paquetes.mp4" type="video/mp4">
-        Tu navegador no soporta la reproducción de video HTML5.
-    </video>
-
+<!-- Reproductor de video mediante enlace de inserción (embed) de YouTube -->
+<div class="w-full aspect-video max-h-[480px] bg-black border border-emerald-500/40 shadow-[0_0_25px_rgba(0,255,102,0.2)] overflow-hidden">
+    <!-- Enlace /embed/ correcto para que cargue el reproductor -->
+    <iframe 
+        class="w-full h-full"
+        src="https://www.youtube.com/embed/ueERvSN70CY" 
+        title="Tutorial Programa Principal" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen>
+    </iframe>
+</div>
     <!-- =================================================================== -->
     <!-- TÍTULO Y PEQUEÑA DESCRIPCIÓN EN LA PARTE INFERIOR DEL VIDEO         -->
     <!-- Edita el texto dentro de <h4> para el título y el de <p> para la    -->
