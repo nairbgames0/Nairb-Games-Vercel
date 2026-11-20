@@ -1,189 +1,446 @@
 <!DOCTYPE html>
+<!-- Define el idioma principal de la página en español -->
 <html lang="es">
 <head>
-    <!-- Configuración para renderizado correcto de caracteres especiales y tildes -->
+    <!-- Configura la codificación de caracteres para mostrar tildes y eñes correctamente -->
     <meta charset="UTF-8">
-    <!-- Viewport adaptativo para móviles, tablets y ordenadores -->
+    <!-- Permite que el diseño se adapte automáticamente a celulares, tablets y PC -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>NAIRB GAMES - Plataforma Virtual Retro VIP</title>
-    
-    <!-- Carga de Tailwind CSS para utilidades de diseño rápido -->
+    <!-- Título que se muestra en la pestaña del navegador -->
+    <title>NAIRB GAMES // GAMER HUB VIP</title>
+
+    <!-- Carga Tailwind CSS para estructurar grillas, márgenes y diseño responsivo -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Librería FontAwesome para iconos retro, candados, mandos y descargas -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Google Fonts: Fuentes retro Arcade 'Press Start 2P', 'Orbitron' y 'Rajdhani' -->
+
+    <!-- Importa fuentes futuristas de Google Fonts ('Orbitron' para títulos y 'Rajdhani' para textos) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Press+Start+2P&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Press+Start+2P&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Estilos CSS personalizados con paleta Cyberpunk / Synthwave Neón -->
+    <!-- Importa iconos vectoriales de FontAwesome (para candados, llaves y botones de descarga) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Importa iconos vectoriales Lucide (para la barra de navegación HUD) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
     <style>
-        /* Asignación de fuentes tipográficas */
-        .font-arcade { font-family: 'Press Start 2P', cursive; }
+        /* ==========================================================================
+           1. VARIABLES DE COLOR GAMER (VERDE NEÓN, CIAN Y NEGRO CARBONO)
+           ========================================================================== */
+        :root {
+            --bg-oscuro: #030705;          /* Negro profundo con matiz cibernético */
+            --bg-panel: #08120c;           /* Fondo de tarjetas y paneles HUD */
+            --bg-panel-hover: #0e2116;     /* Fondo iluminado al pasar el cursor */
+            --verde-neon: #00ff66;         /* Verde neón principal brillante */
+            --verde-lima: #a3ff12;         /* Verde ácido para detalles y acentos */
+            --cian-neon: #00f0ff;          /* Cian neón secundario para contraste */
+            --rosa-neon: #ff007f;          /* Magenta neón para alertas VIP */
+            --oro-neon: #ffe600;           /* Dorado para el programa principal */
+            --texto-blanco: #f0fdf4;       /* Blanco con leve tono menta */
+            --texto-gris: #86efac;         /* Verde claro apagado para textos secundarios */
+        }
+
+        /* Asignación de familias tipográficas */
         .font-orbitron { font-family: 'Orbitron', sans-serif; }
+        .font-arcade { font-family: 'Press Start 2P', cursive; }
         .font-rajdhani { font-family: 'Rajdhani', sans-serif; }
 
-        /* Fondo principal con efecto de espacio infinito neón */
+        /* Reseteo general y configuración de fuente base */
+        * {
+            box-sizing: border-box;
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        /* Fondo principal con cuadrícula cibernética verde estilo radar/consola */
         body {
-            background-color: #060112;
-            color: #ffffff;
-            overflow-x: hidden;
+            min-height: 100vh;
+            background-color: var(--bg-oscuro);
+            color: var(--texto-blanco);
             background-image: 
-                radial-gradient(circle at 50% 10%, rgba(255, 0, 128, 0.25) 0%, transparent 50%),
-                radial-gradient(circle at 90% 80%, rgba(0, 240, 255, 0.2) 0%, transparent 50%),
-                radial-gradient(circle at 10% 90%, rgba(157, 0, 255, 0.2) 0%, transparent 50%);
+                linear-gradient(rgba(0, 255, 102, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 102, 0.05) 1px, transparent 1px),
+                radial-gradient(circle at 50% 0%, rgba(0, 255, 102, 0.16) 0%, transparent 60%),
+                radial-gradient(circle at 85% 90%, rgba(0, 240, 255, 0.1) 0%, transparent 50%);
+            background-size: 40px 40px, 40px 40px, 100% 100%, 100% 100%;
             background-attachment: fixed;
+            overflow-x: hidden;
         }
 
-        /* Cuadrícula Synthwave 3D animada en el fondo */
-        .grid-background {
-            position: fixed;
+        /* Desenfoca y bloquea la web mientras no se ingrese la clave VIP */
+        .content-locked {
+            filter: blur(22px);
+            pointer-events: none;
+            user-select: none;
+        }
+
+        /* ==========================================================================
+           2. BARRA DE NAVEGACIÓN SUPERIOR ESTILO HUD GAMER
+           ========================================================================== */
+        .gamer-navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 14px 30px;
+            background: rgba(5, 13, 9, 0.94);
+            backdrop-filter: blur(14px);
+            border-bottom: 2px solid var(--verde-neon);
+            box-shadow: 0 5px 30px rgba(0, 255, 102, 0.25);
+            position: sticky;
             top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
-            background: 
-                linear-gradient(rgba(6, 1, 18, 0.82), rgba(6, 1, 18, 0.95)),
-                linear-gradient(0deg, transparent 24%, rgba(255, 0, 200, 0.25) 25%, rgba(255, 0, 200, 0.25) 26%, transparent 27%, transparent 74%, rgba(255, 0, 200, 0.25) 75%, rgba(255, 0, 200, 0.25) 76%, transparent 77%),
-                linear-gradient(90deg, transparent 24%, rgba(0, 240, 255, 0.25) 25%, rgba(0, 240, 255, 0.25) 26%, transparent 27%, transparent 74%, rgba(0, 240, 255, 0.25) 75%, rgba(0, 240, 255, 0.25) 76%, transparent 77%);
-            background-size: 60px 60px;
-            animation: moveGrid 10s linear infinite;
+            z-index: 40;
         }
 
-        @keyframes moveGrid {
-            0% { background-position: 0 0; }
-            100% { background-position: 60px 60px; }
+        /* Contenedor del logotipo NAIRB GAMES */
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
         }
 
-        /* Animación para textos con resplandor neón */
-        .neon-glow-pink {
-            text-shadow: 0 0 5px #ff007f, 0 0 12px #ff007f, 0 0 25px #ff007f, 0 0 50px #ff007f;
+        /* Icono del mando con corte diagonal y brillo verde */
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--verde-neon), var(--verde-lima));
+            color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            clip-path: polygon(15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%, 0 15%);
+            box-shadow: 0 0 18px var(--verde-neon);
         }
 
-        .neon-glow-cyan {
-            text-shadow: 0 0 5px #00f0ff, 0 0 12px #00f0ff, 0 0 25px #00f0ff, 0 0 50px #00f0ff;
+        /* Título del logotipo */
+        .brand-text h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.45rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: var(--texto-blanco);
+            text-shadow: 0 0 12px rgba(0, 255, 102, 0.8);
+            line-height: 1.1;
         }
 
-        .neon-glow-gold {
-            text-shadow: 0 0 5px #ffe600, 0 0 15px #ffe600, 0 0 30px #ffe600;
+        .brand-text span {
+            color: var(--verde-neon);
         }
 
-        /* Bordes Neón Resplandecientes */
-        .border-neon-pink {
-            box-shadow: 0 0 15px rgba(255, 0, 127, 0.6), inset 0 0 10px rgba(255, 0, 127, 0.3);
-            border-color: #ff007f;
+        .brand-text p {
+            font-size: 0.72rem;
+            letter-spacing: 3px;
+            color: var(--verde-lima);
+            font-weight: 700;
+            text-transform: uppercase;
         }
 
-        .border-neon-cyan {
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.6), inset 0 0 10px rgba(0, 240, 255, 0.3);
-            border-color: #00f0ff;
+        /* ==========================================================================
+           3. BOTONES DE PESTAÑAS CON CORTES ANGULARES (ESTILO CONSOLA)
+           ========================================================================== */
+        .nav-tabs {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
-        .border-neon-gold {
-            box-shadow: 0 0 20px rgba(255, 230, 0, 0.6), inset 0 0 10px rgba(255, 230, 0, 0.3);
-            border-color: #ffe600;
+        /* Estilo base de cada pestaña */
+        .tab-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 18px;
+            background: var(--bg-panel);
+            color: var(--texto-gris);
+            border: 1px solid rgba(0, 255, 102, 0.28);
+            font-size: 0.98rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+            transition: all 0.25s ease;
         }
 
-        /* Efecto Hover 3D en las tarjetas de consolas */
+        /* Efecto hover en las pestañas */
+        .tab-btn:hover {
+            background: var(--bg-panel-hover);
+            color: var(--texto-blanco);
+            border-color: var(--verde-neon);
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.35);
+        }
+
+        /* Pestaña actualmente activa */
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--verde-neon) 0%, #00cc52 100%);
+            color: #020804;
+            font-weight: 800;
+            box-shadow: 0 0 22px rgba(0, 255, 102, 0.65);
+        }
+
+        /* ==========================================================================
+           4. BOTÓN DE PROGRAMA PRINCIPAL Y BOTÓN DE WHATSAPP
+           ========================================================================== */
+        .launcher-hud-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            background: linear-gradient(135deg, rgba(255, 230, 0, 0.18), rgba(255, 0, 127, 0.2));
+            border: 1.5px solid var(--oro-neon);
+            color: var(--oro-neon);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+            box-shadow: 0 0 15px rgba(255, 230, 0, 0.3);
+            transition: all 0.25s ease;
+        }
+
+        .launcher-hud-btn:hover {
+            background: var(--oro-neon);
+            color: #020804;
+            transform: scale(1.04);
+            box-shadow: 0 0 25px rgba(255, 230, 0, 0.8);
+        }
+
+        .wsp-gamer-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            background: rgba(0, 255, 102, 0.14);
+            border: 1.5px solid var(--verde-neon);
+            color: var(--verde-neon);
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+            box-shadow: inset 0 0 12px rgba(0, 255, 102, 0.25), 0 0 15px rgba(0, 255, 102, 0.3);
+            transition: all 0.25s ease;
+            animation: neonPulse 2.5s infinite alternate;
+        }
+
+        .wsp-gamer-btn:hover {
+            background: var(--verde-neon);
+            color: #020804;
+            transform: scale(1.04);
+            box-shadow: 0 0 28px rgba(0, 255, 102, 0.85);
+        }
+
+        @keyframes neonPulse {
+            from { box-shadow: 0 0 10px rgba(0, 255, 102, 0.25); }
+            to { box-shadow: 0 0 22px rgba(0, 255, 102, 0.65); }
+        }
+
+        /* ==========================================================================
+           5. GESTIÓN DE PESTAÑAS Y ANIMACIÓN GLITCH
+           ========================================================================== */
+        .tab-content {
+            display: none;
+            animation: glitchFade 0.35s ease forwards;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes glitchFade {
+            0% { opacity: 0; transform: scale(0.985) translateY(10px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* ==========================================================================
+           6. MARCO GAMER PARA LA IMAGEN PRINCIPAL (NAIRB RETRO)
+           ========================================================================== */
+        .hero-frame {
+            position: relative;
+            padding: 5px;
+            background: linear-gradient(135deg, var(--verde-neon), #004d1f, var(--verde-lima), var(--verde-neon));
+            background-size: 300% 300%;
+            animation: borderFlow 4s linear infinite;
+            clip-path: polygon(22px 0, 100% 0, 100% calc(100% - 22px), calc(100% - 22px) 100%, 0 100%, 0 22px);
+            box-shadow: 0 0 40px rgba(0, 255, 102, 0.3);
+            margin-bottom: 30px;
+        }
+
+        @keyframes borderFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .hero-inner {
+            position: relative;
+            overflow: hidden;
+            background: #000;
+            clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+        }
+
+        .hero-inner img {
+            width: 100%;
+            max-height: 490px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .hero-frame:hover img {
+            transform: scale(1.03);
+        }
+
+        .hud-badge {
+            position: absolute;
+            top: 15px;
+            left: 25px;
+            background: rgba(3, 7, 5, 0.88);
+            border: 1px solid var(--verde-neon);
+            color: var(--verde-neon);
+            padding: 6px 14px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.4);
+            z-index: 2;
+        }
+
+        /* ==========================================================================
+           7. PANELES CYBER-GAMER Y TARJETAS DE CONSOLAS
+           ========================================================================== */
+        .cyber-card {
+            background: rgba(8, 18, 12, 0.92);
+            border: 1px solid rgba(0, 255, 102, 0.35);
+            border-left: 5px solid var(--verde-neon);
+            padding: 28px;
+            clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65);
+        }
+
+        .cyber-card h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--verde-neon);
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(0, 255, 102, 0.45);
+        }
+
+        /* Tarjetas individuales de consolas en la pestaña JUEGOS */
         .console-card {
             transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            background: rgba(18, 7, 38, 0.75);
+            background: rgba(8, 18, 12, 0.88);
             backdrop-filter: blur(12px);
+            clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
         }
 
         .console-card:hover {
-            transform: translateY(-10px) scale(1.03);
-            box-shadow: 0 0 30px rgba(0, 240, 255, 0.7), 0 0 15px rgba(255, 0, 128, 0.5);
-            border-color: #00f0ff;
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 0 28px rgba(0, 255, 102, 0.55), 0 0 15px rgba(0, 240, 255, 0.35);
+            border-color: var(--verde-neon);
         }
 
-        /* Botón estilo Arcade con animación de pulsación RGB */
+        /* Botones de descarga estilo Arcade */
         .btn-arcade {
             transition: all 0.25s ease;
             position: relative;
             overflow: hidden;
+            clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
         }
 
         .btn-arcade:hover {
-            filter: brightness(1.25);
-            box-shadow: 0 0 20px rgba(255, 0, 128, 0.8);
+            filter: brightness(1.2);
+            box-shadow: 0 0 18px rgba(0, 255, 102, 0.7);
         }
 
         .btn-arcade:active {
             transform: scale(0.96);
         }
 
-        /* Ocultamiento del contenido principal mientras está bloqueado */
-        .content-locked {
-            filter: blur(20px);
+        /* ==========================================================================
+           8. PARTÍCULAS DIGITALES VERDES EN EL FONDO Y SCROLLBAR
+           ========================================================================== */
+        .matrix-spark {
+            position: fixed;
+            width: 3px;
+            height: 14px;
+            background: linear-gradient(to bottom, transparent, var(--verde-neon));
             pointer-events: none;
-            user-select: none;
+            z-index: 1;
+            opacity: 0.5;
+            animation: sparkFall linear infinite;
         }
 
-        /* Personalización de la barra de desplazamiento */
+        @keyframes sparkFall {
+            0% { transform: translateY(-20px); opacity: 0; }
+            50% { opacity: 0.85; }
+            100% { transform: translateY(105vh); opacity: 0; }
+        }
+
         ::-webkit-scrollbar { width: 10px; }
-        ::-webkit-scrollbar-track { background: #060112; }
-        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #ff007f, #00f0ff); border-radius: 5px; }
+        ::-webkit-scrollbar-track { background: #030705; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #00ff66, #00f0ff); border-radius: 5px; }
     </style>
 </head>
-<body class="font-rajdhani min-h-screen flex flex-col justify-between selection:bg-pink-500 selection:text-white">
-
-    <!-- FONDO DE REJILLA 3D ANIMADA -->
-    <div class="grid-background"></div>
+<body class="min-h-screen flex flex-col justify-between selection:bg-emerald-400 selection:text-black">
 
     <!-- ========================================================================= -->
-    <!-- 1. PANTALLA DE BLOQUEO DE INICIO (ENTRY GATEKEEPING SCREEN) -->
-    <!-- Esta pantalla bloquea toda la web al cargar hasta ingresar 1 clave VIP válida. -->
+    <!-- 1. PANTALLA DE BLOQUEO DE INICIO (ACCESO VIP RESTRINGIDO 1 DISPOSITIVO)   -->
     <!-- ========================================================================= -->
-    <div id="entryLockScreen" class="fixed inset-0 z-50 bg-[#060112]/95 backdrop-blur-xl flex items-center justify-center p-4">
-        <div class="max-w-md w-full bg-[#120726] border-2 border-pink-500 rounded-3xl p-6 md:p-8 text-center border-neon-pink relative shadow-[0_0_50px_rgba(255,0,127,0.4)]">
+    <div id="entryLockScreen" class="fixed inset-0 z-50 bg-[#030705]/95 backdrop-blur-xl flex items-center justify-center p-4">
+        <div class="max-w-md w-full bg-[#08120c] border-2 border-emerald-400 p-6 md:p-8 text-center relative shadow-[0_0_50px_rgba(0,255,102,0.35)]" style="clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);">
             
-            <!-- ICONO ARCADE DE BLOQUEO -->
-            <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-tr from-pink-600 via-purple-600 to-cyan-400 p-1 flex items-center justify-center animate-pulse">
-                <div class="w-full h-full bg-[#060112] rounded-full flex items-center justify-center">
-                    <i class="fa-solid fa-lock text-3xl text-pink-400 neon-glow-pink"></i>
+            <!-- ICONO DE CANDADO NEÓN -->
+            <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-tr from-emerald-500 via-lime-400 to-cyan-400 p-1 flex items-center justify-center animate-pulse">
+                <div class="w-full h-full bg-[#030705] rounded-full flex items-center justify-center">
+                    <i class="fa-solid fa-lock text-3xl text-emerald-400"></i>
                 </div>
             </div>
 
             <!-- TÍTULOS DE BIENVENIDA -->
-            <h1 class="font-orbitron font-black text-3xl text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-yellow-300 to-cyan-400 mb-1 tracking-wider neon-glow-pink">
-                NAIRB GAMES
+            <h1 class="font-orbitron font-black text-3xl text-white mb-1 tracking-wider" style="text-shadow: 0 0 15px rgba(0,255,102,0.8);">
+                NAIRB <span class="text-emerald-400">GAMES</span>
             </h1>
-            <p class="font-arcade text-xs text-cyan-300 mb-6 tracking-widest uppercase">ACCESO VIP RESTRINGIDO</p>
-            <p class="text-gray-300 text-sm mb-6">Ingresa tu clave de acceso VIP. Cada clave es de uso exclusivo para 1 solo dispositivo.</p>
+            <p class="font-arcade text-[10px] text-lime-300 mb-5 tracking-widest uppercase">SISTEMA DE ACCESO VIP</p>
+            <p class="text-gray-300 text-base mb-6">Ingresa tu clave de acceso VIP. Cada clave es de uso exclusivo para <strong>1 solo dispositivo</strong>.</p>
 
-            <!-- FORMULARIO DE INGRESO DE CLAVE VIP DE INICIO -->
+            <!-- FORMULARIO DE VALIDACIÓN DE CLAVE VIP -->
             <form onsubmit="validarEntradaInicio(event)" class="space-y-4">
                 <div>
                     <input 
                         type="text" 
                         id="entryKeyInput" 
                         placeholder="INGRESA TU CLAVE VIP AQUÍ..." 
-                        class="w-full bg-[#1c0b3b] border-2 border-cyan-400/60 rounded-2xl px-4 py-3.5 text-center font-orbitron font-bold text-sm text-yellow-300 placeholder-purple-400 uppercase tracking-widest focus:outline-none focus:border-pink-500 focus:shadow-[0_0_20px_rgba(255,0,127,0.6)] transition"
+                        class="w-full bg-[#030705] border-2 border-emerald-400/70 px-4 py-3.5 text-center font-orbitron font-bold text-sm text-lime-300 placeholder-emerald-700 uppercase tracking-widest focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_20px_rgba(0,255,102,0.5)] transition"
                         required
                     >
                 </div>
 
                 <!-- MENSAJE DE ESTADO DEL ACCESO -->
-                <div id="entryStatusMsg" class="hidden text-center p-3 rounded-xl font-orbitron text-xs"></div>
+                <div id="entryStatusMsg" class="hidden text-center p-3 font-orbitron text-xs"></div>
 
                 <button 
                     type="submit" 
-                    class="btn-arcade w-full font-orbitron font-extrabold text-sm bg-gradient-to-r from-pink-600 via-purple-600 to-cyan-500 hover:from-pink-500 hover:to-cyan-400 text-white py-4 rounded-2xl border border-pink-400 border-neon-pink shadow-lg uppercase tracking-wider flex items-center justify-center gap-2"
+                    class="btn-arcade w-full font-orbitron font-extrabold text-sm bg-gradient-to-r from-emerald-500 via-lime-400 to-cyan-400 hover:brightness-110 text-black py-4 shadow-lg uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer"
                 >
-                    <i class="fa-solid fa-key text-yellow-300"></i> DESBLOQUEAR PLATAFORMA
+                    <i class="fa-solid fa-key"></i> DESBLOQUEAR PLATAFORMA
                 </button>
             </form>
 
-            <!-- PINTA DE CLAVES DE DEMOSTRACIÓN PARA PRUEBAS -->
-            <div class="mt-6 pt-4 border-t border-purple-900/50">
+            <!-- EJEMPLO DE FORMATO DE CLAVE -->
+            <div class="mt-6 pt-4 border-t border-emerald-900/60">
                 <p class="text-xs text-gray-400">
-                    <i class="fa-solid fa-shield-halved text-cyan-400 mr-1"></i> Ejemplo de clave: 
-                    <span class="text-cyan-300 font-orbitron font-bold">01010-XXXX-0000</span>
+                    <i class="fa-solid fa-shield-halved text-emerald-400 mr-1"></i> Formato de clave: 
+                    <span class="text-emerald-300 font-orbitron font-bold">NAIRB-2025-XXXX</span>
                 </p>
             </div>
         </div>
@@ -191,355 +448,555 @@
 
 
     <!-- ========================================================================= -->
-    <!-- 2. CONTENIDO PRINCIPAL DE LA PÁGINA WEB (INICIALMENTE BLOQUEADO/OCULTO) -->
+    <!-- 2. CONTENIDO PRINCIPAL DE LA WEB (SE DESBLOQUEA AL INGRESAR CLAVE VÁLIDA) -->
     <!-- ========================================================================= -->
-    <div id="mainWebsiteContent" class="content-locked transition-all duration-700 flex flex-col min-h-screen">
+    <div id="mainWebsiteContent" class="content-locked transition-all duration-700 flex flex-col min-h-screen relative z-10">
 
-        <!-- BARRA DE NAVEGACIÓN SUPERIOR -->
-        <header class="sticky top-0 z-40 bg-[#060112]/90 backdrop-blur-md border-b border-pink-500/40 px-4 py-3 shadow-[0_0_25px_rgba(255,0,127,0.2)]">
-            <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-                
-                <!-- LOGO DE NAIRB GAMES -->
-                <div class="flex items-center gap-3">
-                    <i class="fa-solid fa-gamepad text-3xl text-pink-500 neon-glow-pink animate-bounce"></i>
-                    <h1 class="font-orbitron font-black text-2xl md:text-3xl tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-yellow-300 to-cyan-400">
-                        NAIRB GAMES
-                    </h1>
+        <!-- BARRA DE NAVEGACIÓN SUPERIOR GAMER (HUD) -->
+        <header class="gamer-navbar">
+            <!-- Logotipo NAIRB GAMES (Al hacer clic lleva a Inicio) -->
+            <div class="brand-logo" onclick="cambiarPestana('inicio')">
+                <div class="brand-icon">
+                    <i data-lucide="gamepad-2" size="26"></i>
                 </div>
-
-                <!-- BUSCADOR DE CONSOLAS EN TIEMPO REAL -->
-                <div class="w-full md:w-auto flex items-center bg-[#180933] border-2 border-cyan-400/50 rounded-full px-4 py-2 focus-within:border-pink-500 focus-within:shadow-[0_0_20px_rgba(255,0,127,0.5)]">
-                    <i class="fa-solid fa-magnifying-glass text-cyan-400 mr-2"></i>
-                    <input 
-                        type="text" 
-                        id="searchInput" 
-                        onkeyup="filtrarConsolas()" 
-                        placeholder="Buscar consola (ej. PS2, Xbox, Wii)..." 
-                        class="bg-transparent border-none outline-none text-white placeholder-gray-400 w-full md:w-64 font-rajdhani text-lg"
-                    >
+                <div class="brand-text">
+                    <h1>NAIRB <span>GAMES</span></h1>
+                    <p>// RETRO & ARCADE VIP</p>
                 </div>
+            </div>
 
-                <!-- BOTÓN PARA DESCARGAR EL PROGRAMA PRINCIPAL -->
-                <button 
-                    onclick="abrirModalDescargaPrograma()" 
-                    class="btn-arcade font-orbitron font-bold text-xs md:text-sm bg-gradient-to-r from-yellow-500 via-pink-600 to-cyan-500 text-white px-5 py-3 rounded-2xl border border-yellow-300 border-neon-gold flex items-center gap-2 shadow-lg"
-                >
-                    <i class="fa-solid fa-download text-yellow-200 animate-pulse"></i>
-                    DESCARGAR PROGRAMA PRINCIPAL
+            <!-- Botones de navegación entre pestañas -->
+            <nav class="nav-tabs">
+                <!-- Pestaña 1: Inicio (Activa por defecto) -->
+                <button class="tab-btn active" data-target="inicio">
+                    <i data-lucide="home" size="18"></i>
+                    <span>Inicio</span>
                 </button>
+
+                <!-- Pestaña 2: Juegos (Catálogo completo de consolas) -->
+                <button class="tab-btn" data-target="juegos">
+                    <i data-lucide="swords" size="18"></i>
+                    <span>Juegos</span>
+                </button>
+
+                <!-- Pestaña 3: Video tutoriales -->
+                <button class="tab-btn" data-target="tutoriales">
+                    <i data-lucide="play-square" size="18"></i>
+                    <span>Video tutoriales</span>
+                </button>
+
+                <!-- Pestaña 4: Contacto -->
+                <button class="tab-btn" data-target="contacto">
+                    <i data-lucide="headset" size="18"></i>
+                    <span>Contacto</span>
+                </button>
+            </nav>
+
+            <!-- Botones de Acción Rápida (Programa Principal + Grupo WhatsApp) -->
+            <div class="flex flex-wrap items-center gap-3">
+                <!-- Botón para abrir el modal de descarga del Programa Principal -->
+                <button onclick="abrirModalDescargaPrograma()" class="launcher-hud-btn">
+                    <i class="fa-solid fa-download animate-pulse"></i>
+                    <span>Programa Principal</span>
+                </button>
+
+                <!-- Enlace al Grupo de WhatsApp (Reemplaza TU_LINK_AQUI con tu enlace real) -->
+                <a href="https://chat.whatsapp.com/EAsJJzFaMXA6XixpPMctu1?s=sh&p=a&iam=2" target="_blank" rel="noopener noreferrer" class="wsp-gamer-btn">
+                    <i data-lucide="message-square" size="18"></i>
+                    <span>Grupo de WhatsApp</span>
+                </a>
             </div>
         </header>
 
-        <!-- BANNER HERO DE PRESENTACIÓN -->
-        <section class="relative py-12 px-4 text-center max-w-5xl mx-auto">
-            <div class="inline-block bg-gradient-to-r from-pink-500/20 to-cyan-500/20 border border-pink-400 rounded-full px-5 py-1.5 mb-4 text-cyan-300 font-orbitron text-xs tracking-widest uppercase shadow-[0_0_15px_rgba(0,240,255,0.3)]">
-                <i class="fa-solid fa-crown text-yellow-300 mr-1"></i> Sistema de Consolas Virtuales VIP 2026
-            </div>
-            <h2 class="font-orbitron text-3xl md:text-5xl font-black mb-4 text-white uppercase tracking-wide">
-                CATÁLOGO VIRTUAL <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-300 to-cyan-400 neon-glow-pink">RETRO & NEXT-GEN</span>
-            </h2>
-            <p class="text-gray-300 text-lg md:text-xl max-w-3xl mx-auto font-rajdhani leading-relaxed">
-                Selecciona la consola que prefieras para acceder al paquete de descarga e integración listo para jugar en tu PC.
-            </p>
-
-            <!-- BOTONES DE FILTRADO POR CATEGORÍA DE MARCA -->
-            <div class="flex flex-wrap justify-center gap-2 md:gap-4 mt-8">
-                <button onclick="filtrarCategoria('todas')" class="categoria-btn font-orbitron text-xs md:text-sm px-5 py-2.5 rounded-xl bg-purple-950/80 border border-pink-500 text-white hover:bg-pink-600 transition shadow-md">TODAS</button>
-                <button onclick="filtrarCategoria('playstation')" class="categoria-btn font-orbitron text-xs md:text-sm px-5 py-2.5 rounded-xl bg-purple-950/80 border border-blue-500 text-white hover:bg-blue-600 transition shadow-md">PLAYSTATION</button>
-                <button onclick="filtrarCategoria('xbox')" class="categoria-btn font-orbitron text-xs md:text-sm px-5 py-2.5 rounded-xl bg-purple-950/80 border border-green-500 text-white hover:bg-green-600 transition shadow-md">XBOX</button>
-                <button onclick="filtrarCategoria('nintendo')" class="categoria-btn font-orbitron text-xs md:text-sm px-5 py-2.5 rounded-xl bg-purple-950/80 border border-red-500 text-white hover:bg-red-600 transition shadow-md">NINTENDO</button>
-                <button onclick="filtrarCategoria('sega')" class="categoria-btn font-orbitron text-xs md:text-sm px-5 py-2.5 rounded-xl bg-purple-950/80 border border-yellow-500 text-white hover:bg-yellow-600 transition shadow-md">SEGA / ARCADE</button>
-            </div>
-        </section>
-
-        <!-- CATÁLOGO DE CONSOLAS (GRILLA DE 14 TARJETAS) -->
+        <!-- ===================================================================== -->
+        <!-- CONTENEDOR DE LAS 4 PESTAÑAS DE NAVEGACIÓN                            -->
+        <!-- ===================================================================== -->
         <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
-            <div id="consolesContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+
+            <!-- ================================================================= -->
+            <!-- SECCIÓN 1: INICIO (MENÚ PRINCIPAL CON TU IMAGEN NAIRB RETRO)      -->
+            <!-- ================================================================= -->
+            <section id="inicio" class="tab-content active">
+                <!-- Marco neón verde con cortes diagonales para tu imagen principal -->
+                <div class="hero-frame">
+                    <div class="hero-inner">
+                        <span class="hud-badge">● ONLINE // NAIRB RETRO ZONE VIP</span>
+                        <!-- Se mantiene intacta la ruta de tu imagen principal -->
+                        <img src="nairb-retro.jpg" alt="NAIRB RETRO - Colección Gamer">
+                    </div>
+                </div>
+
+                <!-- Panel de bienvenida con acceso directo al catálogo y programa -->
+                <div class="cyber-card flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div>
+                        <h2>Bienvenido a NAIRB GAMES</h2>
+                        <p class="text-lg text-gray-200 leading-relaxed max-w-3xl">
+                            Accede a nuestra colección definitiva de videojuegos retro y clásicos de consola. Explora el catálogo completo en la pestaña <strong class="text-emerald-400">Juegos</strong>, descarga el <strong class="text-yellow-300">Programa Principal</strong> o únete a nuestra comunidad en <strong class="text-emerald-400">WhatsApp</strong>.
+                        </p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-3 shrink-0">
+                        <button onclick="cambiarPestana('juegos')" class="btn-arcade font-orbitron font-bold text-xs bg-gradient-to-r from-emerald-500 to-lime-400 text-black px-6 py-4 uppercase tracking-wider flex items-center gap-2 cursor-pointer">
+                            <i class="fa-solid fa-gamepad"></i> IR AL CATÁLOGO DE CONSOLAS
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================================================================= -->
+            <!-- SECCIÓN 2: JUEGOS (CATÁLOGO COMPLETO DE 17 TARJETAS + BUSCADOR)   -->
+            <!-- ================================================================= -->
+            <section id="juegos" class="tab-content">
                 
-                <!-- TARJETA 1: PLAYSTATION 1 -->
-                <div class="console-card rounded-3xl border border-blue-500/40 overflow-hidden flex flex-col justify-between p-4" data-categoria="playstation" data-nombre="playstation 1 ps1">
-                    <div>
-                        <div class="relative h-48 rounded-2xl overflow-hidden mb-4 bg-slate-900 border border-blue-400/30">
-                            <img src="img/PS1.jpeg" alt="PlayStation 1" class="w-full h-full object-cover">
-                            <span class="absolute top-3 right-3 bg-blue-600 text-white font-orbitron text-xs px-3 py-1 rounded-full font-extrabold shadow-lg">PS1</span>
+                <!-- Encabezado y Buscador del Catálogo -->
+                <div class="cyber-card mb-8">
+                    <div class="flex flex-col lg:flex-row justify-between items-center gap-6">
+                        <div>
+                            <div class="inline-block bg-emerald-500/15 border border-emerald-400 px-3 py-1 mb-2 text-emerald-300 font-orbitron text-xs tracking-widest uppercase">
+                                <i class="fa-solid fa-crown text-yellow-300 mr-1"></i> Sistema de Consolas Virtuales VIP 2026
+                            </div>
+                            <h2>Catálogo Virtual Retro</h2>
+                            <p class="text-gray-300 text-base">Selecciona la consola que prefieras para descargar el paquete o ingresar a su catálogo web.</p>
                         </div>
-                        <h3 class="font-orbitron text-xl font-extrabold text-cyan-300 mb-1">PlayStation 1</h3>
-                        <p class="text-gray-400 text-sm mb-4">El clásico de 32-bits que cambió la historia. Incluye emulador optimizado.</p>
+
+                        <!-- Buscador de Consolas en Tiempo Real -->
+                        <div class="w-full lg:w-80 flex items-center bg-[#030705] border-2 border-emerald-400/60 px-4 py-2.5 focus-within:border-lime-400 focus-within:shadow-[0_0_18px_rgba(0,255,102,0.4)]">
+                            <i class="fa-solid fa-magnifying-glass text-emerald-400 mr-3"></i>
+                            <input 
+                                type="text" 
+                                id="searchInput" 
+                                onkeyup="filtrarConsolas()" 
+                                placeholder="Buscar consola (PS2, Xbox, Wii)..." 
+                                class="bg-transparent border-none outline-none text-white placeholder-gray-500 w-full font-rajdhani text-lg"
+                            >
+                        </div>
                     </div>
-                    <a href="https://linkoficial.transfernow.net/es/cld?utm_source=20260828pNkjXXvC" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-blue-700 to-cyan-600 hover:from-blue-600 hover:to-cyan-500 text-white py-3.5 rounded-2xl border border-blue-400 shadow-lg flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-download"></i> DESCARGAR PS1
-                    </a>
+
+                    <!-- Botones de Filtrado por Marca / Categoría -->
+                    <div class="flex flex-wrap gap-2 md:gap-3 mt-6 pt-5 border-t border-emerald-500/20">
+                        <button onclick="filtrarCategoria('todas')" class="btn-arcade font-orbitron text-xs px-4 py-2.5 bg-emerald-950/90 border border-emerald-400 text-emerald-300 hover:bg-emerald-500 hover:text-black transition cursor-pointer">TODAS</button>
+                        <button onclick="filtrarCategoria('playstation')" class="btn-arcade font-orbitron text-xs px-4 py-2.5 bg-blue-950/80 border border-blue-400 text-blue-300 hover:bg-blue-600 hover:text-white transition cursor-pointer">PLAYSTATION</button>
+                        <button onclick="filtrarCategoria('xbox')" class="btn-arcade font-orbitron text-xs px-4 py-2.5 bg-green-950/80 border border-green-400 text-green-300 hover:bg-green-600 hover:text-white transition cursor-pointer">XBOX</button>
+                        <button onclick="filtrarCategoria('nintendo')" class="btn-arcade font-orbitron text-xs px-4 py-2.5 bg-red-950/80 border border-red-400 text-red-300 hover:bg-red-600 hover:text-white transition cursor-pointer">NINTENDO</button>
+                        <button onclick="filtrarCategoria('sega')" class="btn-arcade font-orbitron text-xs px-4 py-2.5 bg-yellow-950/80 border border-yellow-400 text-yellow-300 hover:bg-yellow-500 hover:text-black transition cursor-pointer">SEGA / PC / WEB</button>
+                    </div>
                 </div>
 
-                <!-- TARJETA 2: PLAYSTATION 2 -->
-                <div class="console-card rounded-3xl border border-blue-500/40 overflow-hidden flex flex-col justify-between p-4" data-categoria="playstation" data-nombre="playstation 2 ps2">
-                    <div>
-                        <div class="relative h-48 rounded-2xl overflow-hidden mb-4 bg-slate-900 border border-blue-400/30">
-                            <img src="img/PS2.jpeg" alt="PlayStation 2" class="w-full h-full object-cover">
-                            <span class="absolute top-3 right-3 bg-blue-600 text-white font-orbitron text-xs px-3 py-1 rounded-full font-extrabold shadow-lg">PS2</span>
+                <!-- Grilla de Todas tus Consolas (Imágenes y Enlaces Originales Intactos) -->
+                <div id="consolesContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    
+                    <!-- TARJETA 1: PLAYSTATION 1 -->
+                    <div class="console-card border border-blue-500/50 overflow-hidden flex flex-col justify-between p-4" data-categoria="playstation" data-nombre="playstation 1 ps1">
+                        <div>
+                            <div class="relative h-48 overflow-hidden mb-4 bg-slate-900 border border-blue-400/30">
+                                <img src="img/PS1.jpeg" alt="PlayStation 1" class="w-full h-full object-cover">
+                                <span class="absolute top-3 right-3 bg-blue-600 text-white font-orbitron text-xs px-3 py-1 font-extrabold shadow-lg">PS1</span>
+                            </div>
+                            <h3 class="font-orbitron text-xl font-extrabold text-cyan-300 mb-1">PlayStation 1</h3>
+                            <p class="text-gray-300 text-sm mb-4">El clásico de 32-bits que cambió la historia. Incluye emulador optimizado.</p>
                         </div>
-                        <h3 class="font-orbitron text-xl font-extrabold text-cyan-300 mb-1">PlayStation 2</h3>
-                        <p class="text-gray-400 text-sm mb-4">La consola legendaria de 128-bits. Incluye motor de emulación en HD.</p>
+                        <a href="https://linkoficial.transfernow.net/es/cld?utm_source=20260828pNkjXXvC" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-blue-700 to-cyan-600 hover:from-blue-600 hover:to-cyan-500 text-white py-3.5 border border-blue-400 shadow-lg flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-download"></i> DESCARGAR PS1
+                        </a>
                     </div>
-                    <a href="https://gofile.io/d/KKxaRr" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-blue-700 to-cyan-600 hover:from-blue-600 hover:to-cyan-500 text-white py-3.5 rounded-2xl border border-blue-400 shadow-lg flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-download"></i> DESCARGAR PS2
+
+                    <!-- TARJETA 2: PLAYSTATION 2 -->
+                    <div class="console-card border border-blue-500/50 overflow-hidden flex flex-col justify-between p-4" data-categoria="playstation" data-nombre="playstation 2 ps2">
+                        <div>
+                            <div class="relative h-48 overflow-hidden mb-4 bg-slate-900 border border-blue-400/30">
+                                <img src="img/PS2.jpeg" alt="PlayStation 2" class="w-full h-full object-cover">
+                                <span class="absolute top-3 right-3 bg-blue-600 text-white font-orbitron text-xs px-3 py-1 font-extrabold shadow-lg">PS2</span>
+                            </div>
+                            <h3 class="font-orbitron text-xl font-extrabold text-cyan-300 mb-1">PlayStation 2</h3>
+                            <p class="text-gray-300 text-sm mb-4">La consola legendaria de 128-bits. Incluye motor de emulación en HD.</p>
+                        </div>
+                        <a href="https://gofile.io/d/KKxaRr" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-blue-700 to-cyan-600 hover:from-blue-600 hover:to-cyan-500 text-white py-3.5 border border-blue-400 shadow-lg flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-download"></i> DESCARGAR PS2
+                        </a>
+                    </div>
+
+                    <!-- TARJETA 3: PLAYSTATION 3 -->
+                    <div class="console-card border border-blue-500/50 overflow-hidden flex flex-col justify-between p-4" data-categoria="playstation" data-nombre="playstation 3 ps3">
+                        <div>
+                            <div class="relative h-48 overflow-hidden mb-4 bg-slate-900 border border-blue-400/30">
+                                <img src="img/PS3.jpeg" alt="PlayStation 3" class="w-full h-full object-cover">
+                                <span class="absolute top-3 right-3 bg-blue-600 text-white font-orbitron text-xs px-3 py-1 font-extrabold shadow-lg">PS3</span>
+                            </div>
+                            <h3 class="font-orbitron text-xl font-extrabold text-cyan-300 mb-1">PlayStation 3</h3>
+                            <p class="text-gray-300 text-sm mb-4">Arquitectura de procesador Cell. Paquete listo para 60 FPS.</p>
+                        </div>
+                        <a href="https://gofile.io/d/TSB4WZ" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-blue-700 to-cyan-600 hover:from-blue-600 hover:to-cyan-500 text-white py-3.5 border border-blue-400 shadow-lg flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-download"></i> DESCARGAR PS3
+                        </a>
+                    </div>
+
+                    <!-- TARJETA 4: PLAYSTATION 4 -->
+                    <div class="console-card border border-blue-500/50 overflow-hidden flex flex-col justify-between p-4" data-categoria="playstation" data-nombre="playstation 4 ps4">
+                        <div>
+                            <div class="relative h-48 overflow-hidden mb-4 bg-slate-900 border border-blue-400/30">
+                                <img src="img/PS4.jpg" alt="PlayStation 4" class="w-full h-full object-cover">
+                                <span class="absolute top-3 right-3 bg-blue-600 text-white font-orbitron text-xs px-3 py-1 font-extrabold shadow-lg">PS4</span>
+                            </div>
+                            <h3 class="font-orbitron text-xl font-extrabold text-cyan-300 mb-1">PlayStation 4</h3>
+                            <p class="text-gray-300 text-sm mb-4">Potencia gráfica moderna con catálogo de gran impacto visual.</p>
+                        </div>
+                        <a href="https://catalogops4.vercel.app/" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-blue-700 to-cyan-600 hover:from-blue-600 hover:to-cyan-500 text-white py-3.5 border border-blue-400 shadow-lg flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-download"></i> INGRESAR A CATALOGO
+                        </a>
+                    </div>
+
+                    <!-- TARJETA 5: PLAYSTATION 5 -->
+                    <div class="console-card border border-blue-500/50 overflow-hidden flex flex-col justify-between p-4" data-categoria="playstation" data-nombre="playstation 5 ps5">
+                        <div>
+                            <div class="relative h-48 overflow-hidden mb-4 bg-slate-900 border border-blue-400/30">
+                                <img src="img/PS5.jpg" alt="PlayStation 5" class="w-full h-full object-cover">
+                                <span class="absolute top-3 right-3 bg-blue-600 text-white font-orbitron text-xs px-3 py-1 font-extrabold shadow-lg">PS5</span>
+                            </div>
+                            <h3 class="font-orbitron text-xl font-extrabold text-cyan-300 mb-1">PlayStation 5</h3>
+                            <p class="text-gray-300 text-sm mb-4">La consola mas actual al alcance de ti con un solo clic.</p>
+                        </div>
+                        <a href="https://catalogops5.vercel.app/" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-blue-700 to-cyan-600 hover:from-blue-600 hover:to-cyan-500 text-white py-3.5 border border-blue-400 shadow-lg flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-download"></i> INGRESAR A CATALOGO
+                        </a>
+                    </div>
+
+                    <!-- TARJETA 6: PSP -->
+                    <div class="console-card border border-blue-500/50 overflow-hidden flex flex-col justify-between p-4" data-categoria="playstation" data-nombre="psp playstation portable">
+                        <div>
+                            <div class="relative h-48 overflow-hidden mb-4 bg-slate-900 border border-blue-400/30">
+                                <img src="img/PSP.jpg" alt="PSP" class="w-full h-full object-cover">
+                                <span class="absolute top-3 right-3 bg-blue-600 text-white font-orbitron text-xs px-3 py-1 font-extrabold shadow-lg">PSP</span>
+                            </div>
+                            <h3 class="font-orbitron text-xl font-extrabold text-cyan-300 mb-1">PSP (Portátil)</h3>
+                            <p class="text-gray-300 text-sm mb-4">Consola portátil mítica con soporte para texturas escaladas.</p>
+                        </div>
+                        <a href="https://linkoficial.transfernow.net/es/cld?utm_source=20260828ltmGn1kU" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-blue-700 to-cyan-600 hover:from-blue-600 hover:to-cyan-500 text-white py-3.5 border border-blue-400 shadow-lg flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-download"></i> DESCARGAR PSP
+                        </a>
+                    </div>
+
+                    <!-- TARJETA 7: XBOX CLÁSICA -->
+                    <div class="console-card border border-green-500/50 overflow-hidden flex flex-col justify-between p-4" data-categoria="xbox" data-nombre="xbox clasica original first gen">
+                        <div>
+                            <div class="relative h-48 overflow-hidden mb-4 bg-slate-900 border border-green-400/30">
+                                <img src="img/XBOX.jpg" alt="Xbox Clásica" class="w-full h-full object-cover">
+                                <span class="absolute top-3 right-3 bg-green-600 text-white font-orbitron text-xs px-3 py-1 font-extrabold shadow-lg">XBOX 2001</span>
+                            </div>
+                            <h3 class="font-orbitron text-xl font-extrabold text-green-400 mb-1">Xbox Clásica</h3>
+                            <p class="text-gray-300 text-sm mb-4">El origen de la marca Xbox.</p>
+                        </div>
+                        <a href="https://gofile.io/d/roZ5gG" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-green-700 to-emerald-500 hover:from-green-600 hover:to-emerald-400 text-white py-3.5 border border-green-400 shadow-lg flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-download"></i> DESCARGAR XBOX CLÁSICA
+                        </a>
+                    </div>
+
+                    <!-- TARJETA 8: XBOX 360 -->
+                    <div class="console-card border border-green-500/50 overflow-hidden flex flex-col justify-between p-4" data-categoria="xbox" data-nombre="xbox 360 x360">
+                        <div>
+                            <div class="relative h-48 overflow-hidden mb-4 bg-slate-900 border border-green-400/30">
+                                <img src="img/XBOX360.jpg" alt="Xbox 360" class="w-full h-full object-cover">
+                                <span class="absolute top-3 right-3 bg-green-600 text-white font-orbitron text-xs px-3 py-1 font-extrabold shadow-lg">X360</span>
+                            </div>
+                            <h3 class="font-orbitron text-xl font-extrabold text-green-400 mb-1">Xbox 360</h3>
+                            <p class="text-gray-300 text-sm mb-4">Juegos legendarios en Alta Definición con shaders aplicados.</p>
+                        </div>
+                        <a href="https://gofile.io/d/bQChRo" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-green-700 to-emerald-500 hover:from-green-600 hover:to-emerald-400 text-white py-3.5 border border-green-400 shadow-lg flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-download"></i> DESCARGAR XBOX 360
+                        </a>
+                    </div>
+
+                    <!-- TARJETA 9: XBOX ONE -->
+                    <div class="console-card border border-green-500/50 overflow-hidden flex flex-col justify-between p-4" data-categoria="xbox" data-nombre="xbox one xbone">
+                        <div>
+                            <div class="relative h-48 overflow-hidden mb-4 bg-slate-900 border border-green-400/30">
+                                <img src="img/XBOXONE.jpg" alt="Xbox One" class="w-full h-full object-cover">
+                                <span class="absolute top-3 right-3 bg-green-600 text-white font-orbitron text-xs px-3 py-1 font-extrabold shadow-lg">XB ONE</span>
+                            </div>
+                            <h3 class="font-orbitron text-xl font-extrabold text-green-400 mb-1">Xbox One</h3>
+                            <p class="text-gray-300 text-sm mb-4">Entorno virtual de ejecución para juegos de última generación.</p>
+                        </div>
+                        <a href="https://catalogo-xbox-one.vercel.app/" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-green-700 to-emerald-500 hover:from-green-600 hover:to-emerald-400 text-white py-3.5 border border-green-400 shadow-lg flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-download"></i> INGRESAR A XBOX ONE
+                        </a>
+                    </div>
+
+                    <!-- TARJETA 10: NINTENDO RETRO (NES/SNES/N64) -->
+                    <div class="console-card border border-red-500/50 overflow-hidden flex flex-col justify-between p-4" data-categoria="nintendo" data-nombre="nintendo nes snes n64 nintendo 64 super nintendo">
+                        <div>
+                            <div class="relative h-48 overflow-hidden mb-4 bg-slate-900 border border-red-400/30">
+                                <img src="img/NINTENDORETRO.jpg" alt="Nintendo Retro" class="w-full h-full object-cover">
+                                <span class="absolute top-3 right-3 bg-red-600 text-white font-orbitron text-xs px-3 py-1 font-extrabold shadow-lg">NINTENDO</span>
+                            </div>
+                            <h3 class="font-orbitron text-xl font-extrabold text-red-400 mb-1">Nintendo Retro</h3>
+                            <p class="text-gray-300 text-sm mb-4">Pack compilatorio 8/16/64 bits (NES, Super Nintendo, Nintendo 64).</p>
+                        </div>
+                        <a href="https://gofile.io/d/aAZcMC" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-red-700 to-rose-500 hover:from-red-600 hover:to-rose-400 text-white py-3.5 border border-red-400 shadow-lg flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-download"></i> DESCARGAR NINTENDO RETRO
+                        </a>
+                    </div>
+
+                    <!-- TARJETA 11: NINTENDO WII -->
+                    <div class="console-card border border-red-500/50 overflow-hidden flex flex-col justify-between p-4" data-categoria="nintendo" data-nombre="wii nintendo wii">
+                        <div>
+                            <div class="relative h-48 overflow-hidden mb-4 bg-slate-900 border border-red-400/30">
+                                <img src="img/NINTENDOWII.jpg" alt="Nintendo Wii" class="w-full h-full object-cover">
+                                <span class="absolute top-3 right-3 bg-red-600 text-white font-orbitron text-xs px-3 py-1 font-extrabold shadow-lg">WII</span>
+                            </div>
+                            <h3 class="font-orbitron text-xl font-extrabold text-red-400 mb-1">Nintendo Wii</h3>
+                            <p class="text-gray-300 text-sm mb-4">Emulación por controles de movimiento con soporte de mando estándar.</p>
+                        </div>
+                        <a href="https://gofile.io/d/CaynbQ" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-red-700 to-rose-500 hover:from-red-600 hover:to-rose-400 text-white py-3.5 border border-red-400 shadow-lg flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-download"></i> DESCARGAR WII
+                        </a>
+                    </div>
+
+                    <!-- TARJETA 12: NINTENDO WII U -->
+                    <div class="console-card border border-red-500/50 overflow-hidden flex flex-col justify-between p-4" data-categoria="nintendo" data-nombre="wii u nintendo wii u">
+                        <div>
+                            <div class="relative h-48 overflow-hidden mb-4 bg-slate-900 border border-red-400/30">
+                                <img src="img/NINTENDO WIIU.jpg" alt="Nintendo Wii U" class="w-full h-full object-cover">
+                                <span class="absolute top-3 right-3 bg-red-600 text-white font-orbitron text-xs px-3 py-1 font-extrabold shadow-lg">WII U</span>
+                            </div>
+                            <h3 class="font-orbitron text-xl font-extrabold text-red-400 mb-1">Nintendo Wii U</h3>
+                            <p class="text-gray-300 text-sm mb-4">Consola de doble pantalla con soporte para resoluciones hasta 4K.</p>
+                        </div>
+                        <a href="https://gofile.io/d/KcCbA6" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-red-700 to-rose-500 hover:from-red-600 hover:to-rose-400 text-white py-3.5 border border-red-400 shadow-lg flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-download"></i> DESCARGAR WII U
+                        </a>
+                    </div>
+
+                    <!-- TARJETA 13: NINTENDO SWITCH -->
+                    <div class="console-card border border-red-500/50 overflow-hidden flex flex-col justify-between p-4" data-categoria="nintendo" data-nombre="nintendo switch switch">
+                        <div>
+                            <div class="relative h-48 overflow-hidden mb-4 bg-slate-900 border border-red-400/30">
+                                <img src="img/NINTENDO SWITCH.jpg" alt="Nintendo Switch" class="w-full h-full object-cover">
+                                <span class="absolute top-3 right-3 bg-red-600 text-white font-orbitron text-xs px-3 py-1 font-extrabold shadow-lg">SWITCH</span>
+                            </div>
+                            <h3 class="font-orbitron text-xl font-extrabold text-red-400 mb-1">Nintendo Switch</h3>
+                            <p class="text-gray-300 text-sm mb-4">La consola híbrida con emuladores optimizados para computadoras.</p>
+                        </div>
+                        <a href="https://linkoficial.transfernow.net/pt/cld?utm_source=20260520c9mXoXPr" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-red-700 to-rose-500 hover:from-red-600 hover:to-rose-400 text-white py-3.5 border border-red-400 shadow-lg flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-download"></i> DESCARGAR SWITCH
+                        </a>
+                    </div>
+
+                    <!-- TARJETA 14: SEGA SATURN -->
+                    <div class="console-card border border-yellow-500/50 overflow-hidden flex flex-col justify-between p-4" data-categoria="sega" data-nombre="sega saturn saturn">
+                        <div>
+                            <div class="relative h-48 overflow-hidden mb-4 bg-slate-900 border border-yellow-400/30">
+                                <img src="img/SATURN.jpg" alt="SEGA Saturn" class="w-full h-full object-cover">
+                                <span class="absolute top-3 right-3 bg-yellow-600 text-white font-orbitron text-xs px-3 py-1 font-extrabold shadow-lg">SATURN</span>
+                            </div>
+                            <h3 class="font-orbitron text-xl font-extrabold text-yellow-400 mb-1">SEGA Saturn</h3>
+                            <p class="text-gray-300 text-sm mb-4">Consola de culto de 32-bits con catálogo arcade directo de Japón.</p>
+                        </div>
+                        <a href="https://linkoficial.transfernow.net/es/cld?utm_source=20250316mRXqP7fu" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-yellow-600 to-amber-500 hover:from-yellow-500 hover:to-amber-400 text-white py-3.5 border border-yellow-400 shadow-lg flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-download"></i> DESCARGAR SATURN
+                        </a>
+                    </div>
+
+                    <!-- TARJETA 15: SEGA NAOMI / ARCADE -->
+                    <div class="console-card border border-yellow-500/50 overflow-hidden flex flex-col justify-between p-4" data-categoria="sega" data-nombre="sega naomi arcade maquina recreativa">
+                        <div>
+                            <div class="relative h-48 overflow-hidden mb-4 bg-slate-900 border border-yellow-400/30">
+                                <img src="img/NAOMI.jpg" alt="SEGA NAOMI" class="w-full h-full object-cover">
+                                <span class="absolute top-3 right-3 bg-yellow-600 text-white font-orbitron text-xs px-3 py-1 font-extrabold shadow-lg">NAOMI</span>
+                            </div>
+                            <h3 class="font-orbitron text-xl font-extrabold text-yellow-400 mb-1">SEGA NAOMI / Arcade</h3>
+                            <p class="text-gray-300 text-sm mb-4">Placa Arcade mítica de salones recreativos. Emulación optimizada.</p>
+                        </div>
+                        <a href="https://gofile.io/d/acJEjM" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-yellow-600 to-amber-500 hover:from-yellow-500 hover:to-amber-400 text-white py-3.5 border border-yellow-400 shadow-lg flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-download"></i> DESCARGAR NAOMI
+                        </a>
+                    </div>
+
+                    <!-- TARJETA 16: JUEGOS PC -->
+                    <div class="console-card border border-emerald-500/50 overflow-hidden flex flex-col justify-between p-4" data-categoria="sega" data-nombre="juegos pc computadora">
+                        <div>
+                            <div class="relative h-48 overflow-hidden mb-4 bg-slate-900 border border-emerald-400/30">
+                                <img src="img/PCGAMES.jpg" alt="JUEGOS PC" class="w-full h-full object-cover">
+                                <span class="absolute top-3 right-3 bg-emerald-600 text-black font-orbitron text-xs px-3 py-1 font-extrabold shadow-lg">JUEGOS PC</span>
+                            </div>
+                            <h3 class="font-orbitron text-xl font-extrabold text-emerald-400 mb-1">JUEGOS PC</h3>
+                            <p class="text-gray-300 text-sm mb-4">Los mejores juegos de PC.</p>
+                        </div>
+                        <a href="https://catalogo-juegos-pc.vercel.app/" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-emerald-600 to-lime-500 hover:from-emerald-500 hover:to-lime-400 text-black py-3.5 border border-emerald-400 shadow-lg flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-download"></i> INGRESAR A JUEGOS PC
+                        </a>
+                    </div>
+
+                    <!-- TARJETA 17: EMULADOR ANDROID -->
+                    <div class="console-card border border-emerald-500/50 overflow-hidden flex flex-col justify-between p-4" data-categoria="sega" data-nombre="emulador android celular movil">
+                        <div>
+                            <div class="relative h-48 overflow-hidden mb-4 bg-slate-900 border border-emerald-400/30">
+                                <img src="img/EMULADOR ANDROID.jpg" alt="EMULADOR ANDROID" class="w-full h-full object-cover">
+                                <span class="absolute top-3 right-3 bg-emerald-600 text-black font-orbitron text-xs px-3 py-1 font-extrabold shadow-lg">ANDROID</span>
+                            </div>
+                            <h3 class="font-orbitron text-xl font-extrabold text-emerald-400 mb-1">EMULADOR ANDROID</h3>
+                            <p class="text-gray-300 text-sm mb-4">Variedad de juegos de tu consola favorita en tu dispositivo android.</p>
+                        </div>
+                        <a href="https://drive.google.com/file/d/19J61L7S0xEhRnNQh7RHD0N65qTb94zjo/view?usp=sharing" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-emerald-600 to-lime-500 hover:from-emerald-500 hover:to-lime-400 text-black py-3.5 border border-emerald-400 shadow-lg flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-download"></i> DESCARGAR EMULADOR ANDROID
+                        </a>
+                    </div>
+
+                    <!-- TARJETA 18: JUEGOS WEB -->
+                    <div class="console-card border border-emerald-500/50 overflow-hidden flex flex-col justify-between p-4" data-categoria="sega" data-nombre="juegos web navegador online">
+                        <div>
+                            <div class="relative h-48 overflow-hidden mb-4 bg-slate-900 border border-emerald-400/30">
+                                <img src="img/JUEGOSWEB.jpg" alt="JUEGOS WEB" class="w-full h-full object-cover">
+                                <span class="absolute top-3 right-3 bg-emerald-600 text-black font-orbitron text-xs px-3 py-1 font-extrabold shadow-lg">JUEGOS WEB</span>
+                            </div>
+                            <h3 class="font-orbitron text-xl font-extrabold text-emerald-400 mb-1">JUEGOS WEB</h3>
+                            <p class="text-gray-300 text-sm mb-4">Un solo clic y horas de diversión garantizada sin descargar nada.</p>
+                        </div>
+                        <a href="https://www.crazygames.com/es/" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-emerald-600 to-lime-500 hover:from-emerald-500 hover:to-lime-400 text-black py-3.5 border border-emerald-400 shadow-lg flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-play"></i> JUGAR
+                        </a>
+                    </div>
+
+                </div>
+            </section>
+
+<!-- ================================================================= -->
+            <!-- SECCIÓN 3: VIDEO TUTORIALES                                       -->
+            <!-- ================================================================= -->
+            <section id="tutoriales" class="tab-content">
+                <div class="cyber-card">
+                    <!-- Título principal de la pestaña -->
+                    <h2>Video Tutoriales</h2>
+                    <!-- Descripción de la pestaña -->
+                    <p class="text-lg text-gray-200 leading-relaxed mb-6">
+                        Guías paso a paso en video para descargar, instalar el Programa Principal y juegos de NAIRB GAMES.
+                    </p>
+
+                    <!-- Tarjeta principal: Video tutorial de instalación de programa principal -->
+                    <div class="bg-[#030705] border-2 border-emerald-400/60 p-5 md:p-6 mb-6">
+                        <h3 class="font-orbitron text-emerald-400 font-bold text-lg mb-2">
+                            <i class="fa-solid fa-circle-play mr-2 text-lime-400"></i>VIDEO TUTORIAL DE INSTALACIÓN DE PROGRAMA PRINCIPAL
+                        </h3>
+                        <p class="text-gray-300 text-sm mb-4">
+                            Aprende a descargar e instalar el launcher global de NAIRB GAMES y activar tu clave VIP correctamente.
+                        </p>
+
+                        <!-- =================================================================== -->
+                        <!-- AQUÍ ES DONDE DEBES PONER TU VIDEO DEL PROGRAMA PRINCIPAL          -->
+                        <!-- Opción A (archivo local .mp4 / .webm): coloca tu video en una     -->
+                        <!-- carpeta (por ejemplo "videos/instalacion-programa.mp4") y escribe -->
+                        <!-- esa ruta en src="..." dentro de <source>.                           -->
+                        <!-- Opción B (enlace directo a un archivo de video): pega el enlace     -->
+                        <!-- directo al video en src="...".                                       -->
+                        <!-- =================================================================== -->
+<!-- Contenedor general que agrupa el reproductor y su título/descripción inferior -->
+<div class="space-y-3">
+    <!-- Reproductor de video (se mantiene igual tu ruta y configuración) -->
+    <video
+        controls
+        preload="metadata"
+        class="w-full max-h-[480px] bg-black border border-emerald-500/40 shadow-[0_0_25px_rgba(0,255,102,0.2)]"
+    >
+        <!-- PON AQUÍ LA RUTA O ENLACE DE TU VIDEO DE INSTALACIÓN -->
+        <source src="Videos/Tutorial Programa Principal.mp4" type="video/mp4">
+        Tu navegador no soporta la reproducción de video HTML5.
+    </video>
+
+    <!-- =================================================================== -->
+    <!-- TÍTULO Y PEQUEÑA DESCRIPCIÓN EN LA PARTE INFERIOR DEL VIDEO         -->
+    <!-- Edita el texto dentro de <h4> para el título y el de <p> para la    -->
+    <!-- descripción corta del video.                                        -->
+    <!-- =================================================================== -->
+    <div class="bg-[#08120c] border border-emerald-500/35 p-4">
+        <!-- TÍTULO INFERIOR DEL VIDEO -->
+        <h4 class="font-orbitron text-sm md:text-base font-bold text-lime-300 uppercase tracking-wider mb-1">
+            <i class="fa-solid fa-clapperboard mr-2 text-emerald-400"></i>Tutorial: Descarga de paquetes de las consolas y como ejecutarlas
+        </h4>
+        <!-- PEQUEÑA DESCRIPCIÓN DEL VIDEO -->
+        <p class="text-gray-300 text-sm leading-relaxed">
+            Aprende paso a paso cómo descargar, descomprimir y cargar las bibliotecas de PS1, PS2, Xbox, Nintendo y Arcade, etc de NAIRB GAMES.
+        </p>
+    </div>
+</div>
+
+
+
+                        
+<!-- Contenedor general que agrupa el reproductor y su título/descripción inferior -->
+<div class="space-y-3">
+    <!-- Reproductor de video (se mantiene igual tu ruta y configuración) -->
+    <video
+        controls
+        preload="metadata"
+        class="w-full max-h-[480px] bg-black border border-emerald-500/40 shadow-[0_0_25px_rgba(0,255,102,0.2)]"
+    >
+        <!-- PON AQUÍ LA RUTA O ENLACE DE TU VIDEO DE INSTALACIÓN -->
+        <source src="Videos/tutorial descagar de paquetes.mp4" type="video/mp4">
+        Tu navegador no soporta la reproducción de video HTML5.
+    </video>
+
+    <!-- =================================================================== -->
+    <!-- TÍTULO Y PEQUEÑA DESCRIPCIÓN EN LA PARTE INFERIOR DEL VIDEO         -->
+    <!-- Edita el texto dentro de <h4> para el título y el de <p> para la    -->
+    <!-- descripción corta del video.                                        -->
+    <!-- =================================================================== -->
+    <div class="bg-[#08120c] border border-emerald-500/35 p-4">
+        <!-- TÍTULO INFERIOR DEL VIDEO -->
+        <h4 class="font-orbitron text-sm md:text-base font-bold text-lime-300 uppercase tracking-wider mb-1">
+            <i class="fa-solid fa-clapperboard mr-2 text-emerald-400"></i>Tu Sistema Preferido
+        </h4>
+        <!-- PEQUEÑA DESCRIPCIÓN DEL VIDEO -->
+        <p class="text-gray-300 text-sm leading-relaxed">
+            Nairb Games.
+        </p>
+    </div>
+</div>
+                    </div>
+
+                    <!-- Tarjeta secundaria informativa -->
+                    <div class="bg-[#030705] border border-emerald-500/40 p-5">
+                        <h3 class="font-orbitron text-emerald-400 font-bold text-lg mb-2">
+                            <i class="fa-solid fa-gamepad mr-2"></i>2. Configuración de Mandos
+                        </h3>
+                        <p class="text-gray-300 text-sm">
+                            Cómo conectar tu control USB/Bluetooth:
+                        </p>
+                        <p class="text-gray-300 text-sm">
+                            Conectar directamente tu mando via cable usb a tu PC o si en caso disponga de bluetooth conectarlo antes de abrir el Emulador
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- ================================================================= -->
+            <!-- SECCIÓN 4: CONTACTO                                               -->
+            <!-- ================================================================= -->
+            <section id="contacto" class="tab-content">
+                <div class="cyber-card">
+                    <h2>Centro de Contacto y Soporte VIP</h2>
+                    <p class="text-lg text-gray-200 leading-relaxed mb-6">
+                        ¿Buscas algún título en especial, necesitas renovar o consultar tu clave VIP o requieres asistencia técnica? Escríbenos directamente a través de nuestro grupo oficial de WhatsApp o canales sociales.
+                    </p>
+                    <a href="https://chat.whatsapp.com/TU_LINK_AQUI" target="_blank" rel="noopener noreferrer" class="wsp-gamer-btn inline-flex">
+                        <i data-lucide="message-square" size="18"></i>
+                        <span>Unirme al Grupo de WhatsApp</span>
                     </a>
                 </div>
+            </section>
 
-                <!-- TARJETA 3: PLAYSTATION 3 -->
-                <div class="console-card rounded-3xl border border-blue-500/40 overflow-hidden flex flex-col justify-between p-4" data-categoria="playstation" data-nombre="playstation 3 ps3">
-                    <div>
-                        <div class="relative h-48 rounded-2xl overflow-hidden mb-4 bg-slate-900 border border-blue-400/30">
-                            <img src="img/PS3.jpeg" alt="PlayStation 3" class="w-full h-full object-cover">
-                            <span class="absolute top-3 right-3 bg-blue-600 text-white font-orbitron text-xs px-3 py-1 rounded-full font-extrabold shadow-lg">PS3</span>
-                        </div>
-                        <h3 class="font-orbitron text-xl font-extrabold text-cyan-300 mb-1">PlayStation 3</h3>
-                        <p class="text-gray-400 text-sm mb-4">Arquitectura de procesador Cell. Paquete listo para 60 FPS.</p>
-                    </div>
-                    <a href="https://gofile.io/d/TSB4WZ" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-blue-700 to-cyan-600 hover:from-blue-600 hover:to-cyan-500 text-white py-3.5 rounded-2xl border border-blue-400 shadow-lg flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-download"></i> DESCARGAR PS3
-                    </a>
-                </div>
-
-                <!-- TARJETA 4: PLAYSTATION 4 -->
-                <div class="console-card rounded-3xl border border-blue-500/40 overflow-hidden flex flex-col justify-between p-4" data-categoria="playstation" data-nombre="playstation 4 ps4">
-                    <div>
-                        <div class="relative h-48 rounded-2xl overflow-hidden mb-4 bg-slate-900 border border-blue-400/30">
-                            <img src="img/PS4.jpg" alt="PlayStation 4" class="w-full h-full object-cover">
-                            <span class="absolute top-3 right-3 bg-blue-600 text-white font-orbitron text-xs px-3 py-1 rounded-full font-extrabold shadow-lg">PS4</span>
-                        </div>
-                        <h3 class="font-orbitron text-xl font-extrabold text-cyan-300 mb-1">PlayStation 4</h3>
-                        <p class="text-gray-400 text-sm mb-4">Potencia gráfica moderna con catálogo de gran impacto visual.</p>
-                    </div>
-                    <a href="https://catalogops4.vercel.app/" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-blue-700 to-cyan-600 hover:from-blue-600 hover:to-cyan-500 text-white py-3.5 rounded-2xl border border-blue-400 shadow-lg flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-download"></i> INGRESAR A CATALOGO
-                    </a>
-                </div>
-
-                <!-- TARJETA 5: PLAYSTATION 5 -->
-                <div class="console-card rounded-3xl border border-blue-500/40 overflow-hidden flex flex-col justify-between p-5" data-categoria="playstation" data-nombre="playstation 5 ps5">
-                    <div>
-                        <div class="relative h-48 rounded-2xl overflow-hidden mb-4 bg-slate-900 border border-blue-400/30">
-                            <img src="img/PS5.jpg" alt="PlayStation 5" class="w-full h-full object-cover">
-                            <span class="absolute top-3 right-3 bg-blue-600 text-white font-orbitron text-xs px-3 py-1 rounded-full font-extrabold shadow-lg">PS5</span>
-                        </div>
-                        <h3 class="font-orbitron text-xl font-extrabold text-cyan-300 mb-1">PlayStation 5</h3>
-                        <p class="text-gray-400 text-sm mb-4">La consola mas actual al alcance de ti con un solo crick.</p>
-                    </div>
-                    <a href="https://catalogops5.vercel.app/" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-blue-700 to-cyan-600 hover:from-blue-600 hover:to-cyan-500 text-white py-3.5 rounded-2xl border border-blue-400 shadow-lg flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-download"></i> INGRESAR A CATALOGO
-                    </a>
-                </div>
-
-                <!-- TARJETA 5: PSP -->
-                <div class="console-card rounded-3xl border border-blue-500/40 overflow-hidden flex flex-col justify-between p-4" data-categoria="playstation" data-nombre="psp playstation portable">
-                    <div>
-                        <div class="relative h-48 rounded-2xl overflow-hidden mb-4 bg-slate-900 border border-blue-400/30">
-                            <img src="img/PSP.jpg" alt="PSP" class="w-full h-full object-cover">
-                            <span class="absolute top-3 right-3 bg-blue-600 text-white font-orbitron text-xs px-3 py-1 rounded-full font-extrabold shadow-lg">PSP</span>
-                        </div>
-                        <h3 class="font-orbitron text-xl font-extrabold text-cyan-300 mb-1">PSP (Portátil)</h3>
-                        <p class="text-gray-400 text-sm mb-4">Consola portátil mítica con soporte para texturas escaladas.</p>
-                    </div>
-                    <a href="https://linkoficial.transfernow.net/es/cld?utm_source=20260828ltmGn1kU" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-blue-700 to-cyan-600 hover:from-blue-600 hover:to-cyan-500 text-white py-3.5 rounded-2xl border border-blue-400 shadow-lg flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-download"></i> DESCARGAR PSP
-                    </a>
-                </div>
-
-                <!-- TARJETA 6: XBOX CLÁSICA -->
-                <div class="console-card rounded-3xl border border-green-500/40 overflow-hidden flex flex-col justify-between p-4" data-categoria="xbox" data-nombre="xbox clasica original first gen">
-                    <div>
-                        <div class="relative h-48 rounded-2xl overflow-hidden mb-4 bg-slate-900 border border-green-400/30">
-                            <img src="img/XBOX.jpg" alt="Xbox Clásica" class="w-full h-full object-cover">
-                            <span class="absolute top-3 right-3 bg-green-600 text-white font-orbitron text-xs px-3 py-1 rounded-full font-extrabold shadow-lg">XBOX 2001</span>
-                        </div>
-                        <h3 class="font-orbitron text-xl font-extrabold text-green-400 mb-1">Xbox Clásica</h3>
-                        <p class="text-gray-400 text-sm mb-4">El origen de la marca Xbox.</p>
-                    </div>
-                    <a href="https://gofile.io/d/roZ5gG" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-green-700 to-emerald-500 hover:from-green-600 hover:to-emerald-400 text-white py-3.5 rounded-2xl border border-green-400 shadow-lg flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-download"></i> DESCARGAR XBOX CLÁSICA
-                    </a>
-                </div>
-
-                <!-- TARJETA 7: XBOX 360 -->
-                <div class="console-card rounded-3xl border border-green-500/40 overflow-hidden flex flex-col justify-between p-4" data-categoria="xbox" data-nombre="xbox 360 x360">
-                    <div>
-                        <div class="relative h-48 rounded-2xl overflow-hidden mb-4 bg-slate-900 border border-green-400/30">
-                            <img src="img/XBOX360.jpg" alt="Xbox 360" class="w-full h-full object-cover">
-                            <span class="absolute top-3 right-3 bg-green-600 text-white font-orbitron text-xs px-3 py-1 rounded-full font-extrabold shadow-lg">X360</span>
-                        </div>
-                        <h3 class="font-orbitron text-xl font-extrabold text-green-400 mb-1">Xbox 360</h3>
-                        <p class="text-gray-400 text-sm mb-4">Juegos legendarios en Alta Definición con shaders aplicados.</p>
-                    </div>
-                    <a href="https://gofile.io/d/bQChRo" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-green-700 to-emerald-500 hover:from-green-600 hover:to-emerald-400 text-white py-3.5 rounded-2xl border border-green-400 shadow-lg flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-download"></i> DESCARGAR XBOX 360
-                    </a>
-                </div>
-
-                <!-- TARJETA 8: XBOX ONE -->
-                <div class="console-card rounded-3xl border border-green-500/40 overflow-hidden flex flex-col justify-between p-4" data-categoria="xbox" data-nombre="xbox one xbone">
-                    <div>
-                        <div class="relative h-48 rounded-2xl overflow-hidden mb-4 bg-slate-900 border border-green-400/30">
-                            <img src="img/XBOXONE.jpg"Xbox One" class="w-full h-full object-cover">
-                            <span class="absolute top-3 right-3 bg-green-600 text-white font-orbitron text-xs px-3 py-1 rounded-full font-extrabold shadow-lg">XB ONE</span>
-                        </div>
-                        <h3 class="font-orbitron text-xl font-extrabold text-green-400 mb-1">Xbox One</h3>
-                        <p class="text-gray-400 text-sm mb-4">Entorno virtual de ejecución para juegos de última generación.</p>
-                    </div>
-                    <a href="https://catalogo-xbox-one.vercel.app/" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-green-700 to-emerald-500 hover:from-green-600 hover:to-emerald-400 text-white py-3.5 rounded-2xl border border-green-400 shadow-lg flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-download"></i> INGRESAR A XBOX ONE
-                    </a>
-                </div>
-
-                <!-- TARJETA 9: NINTENDO (NES/SNES/N64) -->
-                <div class="console-card rounded-3xl border border-red-500/40 overflow-hidden flex flex-col justify-between p-4" data-categoria="nintendo" data-nombre="nintendo nes snes n64 nintendo 64 super nintendo">
-                    <div>
-                        <div class="relative h-48 rounded-2xl overflow-hidden mb-4 bg-slate-900 border border-red-400/30">
-                            <img src="img/NINTENDORETRO.jpg" alt="Nintendo Retro" class="w-full h-full object-cover">
-                            <span class="absolute top-3 right-3 bg-red-600 text-white font-orbitron text-xs px-3 py-1 rounded-full font-extrabold shadow-lg">NINTENDO</span>
-                        </div>
-                        <h3 class="font-orbitron text-xl font-extrabold text-red-400 mb-1">Nintendo Retro</h3>
-                        <p class="text-gray-400 text-sm mb-4">Pack compilatorio 8/16/64 bits (NES, Super Nintendo, Nintendo 64).</p>
-                    </div>
-                    <a href="https://gofile.io/d/aAZcMC" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-red-700 to-rose-500 hover:from-red-600 hover:to-rose-400 text-white py-3.5 rounded-2xl border border-red-400 shadow-lg flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-download"></i> DESCARGAR NINTENDO RETRO
-                    </a>
-                </div>
-
-                <!-- TARJETA 10: NINTENDO WII -->
-                <div class="console-card rounded-3xl border border-red-500/40 overflow-hidden flex flex-col justify-between p-4" data-categoria="nintendo" data-nombre="wii nintendo wii">
-                    <div>
-                        <div class="relative h-48 rounded-2xl overflow-hidden mb-4 bg-slate-900 border border-red-400/30">
-                            <img src="img/NINTENDOWII.jpg" alt="Nintendo Wii" class="w-full h-full object-cover">
-                            <span class="absolute top-3 right-3 bg-red-600 text-white font-orbitron text-xs px-3 py-1 rounded-full font-extrabold shadow-lg">WII</span>
-                        </div>
-                        <h3 class="font-orbitron text-xl font-extrabold text-red-400 mb-1">Nintendo Wii</h3>
-                        <p class="text-gray-400 text-sm mb-4">Emulación por controles de movimiento con soporte de mando estándar.</p>
-                    </div>
-                    <a href="https://gofile.io/d/CaynbQ" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-red-700 to-rose-500 hover:from-red-600 hover:to-rose-400 text-white py-3.5 rounded-2xl border border-red-400 shadow-lg flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-download"></i> DESCARGAR WII
-                    </a>
-                </div>
-
-                <!-- TARJETA 11: NINTENDO WII U -->
-                <div class="console-card rounded-3xl border border-red-500/40 overflow-hidden flex flex-col justify-between p-4" data-categoria="nintendo" data-nombre="wii u nintendo wii u">
-                    <div>
-                        <div class="relative h-48 rounded-2xl overflow-hidden mb-4 bg-slate-900 border border-red-400/30">
-                            <img src="img/NINTENDO WIIU.jpg" alt="Nintendo Wii U" class="w-full h-full object-cover">
-                            <span class="absolute top-3 right-3 bg-red-600 text-white font-orbitron text-xs px-3 py-1 rounded-full font-extrabold shadow-lg">WII U</span>
-                        </div>
-                        <h3 class="font-orbitron text-xl font-extrabold text-red-400 mb-1">Nintendo Wii U</h3>
-                        <p class="text-gray-400 text-sm mb-4">Consola de doble pantalla con soporte para resoluciones hasta 4K.</p>
-                    </div>
-                    <a href="https://gofile.io/d/KcCbA6" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-red-700 to-rose-500 hover:from-red-600 hover:to-rose-400 text-white py-3.5 rounded-2xl border border-red-400 shadow-lg flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-download"></i> DESCARGAR WII U
-                    </a>
-                </div>
-
-                <!-- TARJETA 12: NINTENDO SWITCH -->
-                <div class="console-card rounded-3xl border border-red-500/40 overflow-hidden flex flex-col justify-between p-4" data-categoria="nintendo" data-nombre="nintendo switch switch">
-                    <div>
-                        <div class="relative h-48 rounded-2xl overflow-hidden mb-4 bg-slate-900 border border-red-400/30">
-                            <img src="img/NINTENDO SWITCH.jpg" alt="Nintendo Switch" class="w-full h-full object-cover">
-                            <span class="absolute top-3 right-3 bg-red-600 text-white font-orbitron text-xs px-3 py-1 rounded-full font-extrabold shadow-lg">SWITCH</span>
-                        </div>
-                        <h3 class="font-orbitron text-xl font-extrabold text-red-400 mb-1">Nintendo Switch</h3>
-                        <p class="text-gray-400 text-sm mb-4">La consola híbrida con emuladores optimizados para computadoras.</p>
-                    </div>
-                    <a href="https://linkoficial.transfernow.net/pt/cld?utm_source=20260520c9mXoXPr" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-red-700 to-rose-500 hover:from-red-600 hover:to-rose-400 text-white py-3.5 rounded-2xl border border-red-400 shadow-lg flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-download"></i> DESCARGAR SWITCH
-                    </a>
-                </div>
-
-                <!-- TARJETA 13: SEGA SATURN -->
-                <div class="console-card rounded-3xl border border-yellow-500/40 overflow-hidden flex flex-col justify-between p-4" data-categoria="sega" data-nombre="sega saturn saturn">
-                    <div>
-                        <div class="relative h-48 rounded-2xl overflow-hidden mb-4 bg-slate-900 border border-yellow-400/30">
-                            <img src="img/SATURN.jpg" alt="SEGA Saturn" class="w-full h-full object-cover">
-                            <span class="absolute top-3 right-3 bg-yellow-600 text-white font-orbitron text-xs px-3 py-1 rounded-full font-extrabold shadow-lg">SATURN</span>
-                        </div>
-                        <h3 class="font-orbitron text-xl font-extrabold text-yellow-400 mb-1">SEGA Saturn</h3>
-                        <p class="text-gray-400 text-sm mb-4">Consola de culto de 32-bits con catálogo arcade directo de Japón.</p>
-                    </div>
-                    <a href="https://linkoficial.transfernow.net/es/cld?utm_source=20250316mRXqP7fu" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-yellow-600 to-amber-500 hover:from-yellow-500 hover:to-amber-400 text-white py-3.5 rounded-2xl border border-yellow-400 shadow-lg flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-download"></i> DESCARGAR SATURN
-                    </a>
-                </div>
-
-                <!-- TARJETA 14: SEGA NAOMI / ARCADE -->
-                <div class="console-card rounded-3xl border border-yellow-500/40 overflow-hidden flex flex-col justify-between p-4" data-categoria="sega" data-nombre="sega naomi arcade maquina recreativa">
-                    <div>
-                        <div class="relative h-48 rounded-2xl overflow-hidden mb-4 bg-slate-900 border border-yellow-400/30">
-                            <img src="img/NAOMI.jpg" alt="SEGA NAOMI" class="w-full h-full object-cover">
-                            <span class="absolute top-3 right-3 bg-yellow-600 text-white font-orbitron text-xs px-3 py-1 rounded-full font-extrabold shadow-lg">NAOMI</span>
-                        </div>
-                        <h3 class="font-orbitron text-xl font-extrabold text-yellow-400 mb-1">SEGA NAOMI / Arcade</h3>
-                        <p class="text-gray-400 text-sm mb-4">Placa Arcade mítica de salones recreativos. Emulación optimizada.</p>
-                    </div>
-                    <a href="https://gofile.io/d/acJEjM" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-yellow-600 to-amber-500 hover:from-yellow-500 hover:to-amber-400 text-white py-3.5 rounded-2xl border border-yellow-400 shadow-lg flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-download"></i> DESCARGAR NAOMI
-                    </a>
-                </div>
-
-                 <!-- TARJETA 15: JUEGOS PC-->
-                <div class="console-card rounded-3xl border border-black-500/40 overflow-hidden flex flex-col justify-between p-4" data-categoria="sega" data-nombre="Juegos PC">
-                    <div>
-                        <div class="relative h-48 rounded-2xl overflow-hidden mb-4 bg-slate-900 border border-yellow-400/30">
-                            <img src="img/PCGAMES.jpg" alt="JUEGOS PC" class="w-full h-full object-cover">
-                            <span class="absolute top-3 right-3 bg-black-600 text-white font-orbitron text-xs px-3 py-1 rounded-full font-extrabold shadow-lg">JUEGOS PC</span>
-                        </div>
-                        <h3 class="font-orbitron text-xl font-extrabold text--400 mb-1">JUEGOS PC </h3>
-                        <p class="text-gray-400 text-sm mb-4">Los mejores juegos de pc.</p>
-                    </div>
-                    <a href="https://catalogo-juegos-pc.vercel.app/" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-black-600 to-amber-500 hover:from-white-500 hover:to-amber-400 text-white py-3.5 rounded-2xl border border-black-400 shadow-lg flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-download"></i> INGRESAR A JUEGOS PC
-                    </a>
-                </div>
-
- <!-- TARJETA 15: JUEGOS EMULADOR ANDORID-->
-                <div class="console-card rounded-3xl border border-black-500/40 overflow-hidden flex flex-col justify-between p-4" data-categoria="sega" data-nombre="Emulador Android">
-                    <div>
-                        <div class="relative h-48 rounded-2xl overflow-hidden mb-4 bg-slate-900 border border-yellow-400/30">
-                            <img src="img/EMULADOR ANDROID.jpg" alt="JUEGOS PC" class="w-full h-full object-cover">
-                            <span class="absolute top-3 right-3 bg-black-600 text-white font-orbitron text-xs px-3 py-1 rounded-full font-extrabold shadow-lg">JUEGOS ANDROID</span>
-                        </div>
-                        <h3 class="font-orbitron text-xl font-extrabold text--400 mb-1">EMULADOR ANDROID </h3>
-                        <p class="text-gray-400 text-sm mb-4">Variedad de juegos de tu consola favorita en tu dispositivo android.</p>
-                    </div>
-                    <a href="https://drive.google.com/file/d/19J61L7S0xEhRnNQh7RHD0N65qTb94zjo/view?usp=sharing" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-black-600 to-amber-500 hover:from-white-500 hover:to-amber-400 text-white py-3.5 rounded-2xl border border-black-400 shadow-lg flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-download"></i> DESCARGAR EMULADOR ANDROID
-                    </a>
-                </div>
-
-<!-- TARJETA 15: JUEGOS WEB-->
-                <div class="console-card rounded-3xl border border-black-500/40 overflow-hidden flex flex-col justify-between p-4" data-categoria="sega" data-nombre="Juegos Web">
-                    <div>
-                        <div class="relative h-48 rounded-2xl overflow-hidden mb-4 bg-slate-900 border border-yellow-400/30">
-                            <img src="img/JUEGOSWEB.jpg" alt="JUEGOS PC" class="w-full h-full object-cover">
-                            <span class="absolute top-3 right-3 bg-black-600 text-white font-orbitron text-xs px-3 py-1 rounded-full font-extrabold shadow-lg">JUEGOS WEB</span>
-                        </div>
-                        <h3 class="font-orbitron text-xl font-extrabold text--400 mb-1">JUEGOS WEB </h3>
-                        <p class="text-gray-400 text-sm mb-4">Un solo crick y horas de diversion garantisada sin descargar nada.</p>
-                    </div>
-                    <a href="https://www.crazygames.com/es/" target="_blank" class="btn-arcade text-center font-orbitron text-xs font-bold bg-gradient-to-r from-black-600 to-amber-500 hover:from-white-500 hover:to-amber-400 text-white py-3.5 rounded-2xl border border-black-400 shadow-lg flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-download"></i> JUGAR 
-                    </a>
-                </div>
-
-            </div>
         </main>
 
-        <!-- FOOTER / PIE DE PÁGINA RETRO -->
-        <footer class="bg-[#04010b] border-t border-pink-500/30 py-8 px-4 text-center text-gray-400 font-rajdhani mt-12">
+        <!-- ===================================================================== -->
+        <!-- PIE DE PÁGINA GAMER                                                   -->
+        <!-- ===================================================================== -->
+        <footer class="bg-[#030705]/95 border-t border-emerald-500/40 py-8 px-4 text-gray-400 mt-12">
             <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-                <div class="text-left">
-                    <p class="font-orbitron text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-cyan-400">NAIRB GAMES © 2026</p>
-                    <p class="text-sm text-gray-400">Plataforma Privada de Consolas Virtuales y Emulación VIP, Todos los derechos estan reservados por NAIRB GAMES.</p>
+                <div class="text-center md:text-left">
+                    <p class="font-orbitron text-xl font-black text-white">NAIRB <span class="text-emerald-400">GAMES</span> © 2025</p>
+                    <p class="text-sm text-gray-400">Plataforma Privada de Consolas Virtuales y Emulación VIP. Todos los derechos reservados por NAIRB GAMES.</p>
                 </div>
-                <div class="flex gap-4 text-2xl">
-                    <a href="#" class="text-gray-400 hover:text-cyan-400 transition"><i class="fa-brands fa-discord"></i></a>
-                    <a href="#" class="text-gray-400 hover:text-pink-500 transition"><i class="fa-brands fa-youtube"></i></a>
-                    <a href="#" class="text-gray-400 hover:text-yellow-400 transition"><i class="fa-brands fa-telegram"></i></a>
+                <div class="flex gap-5 text-2xl">
+                    <a href="#" class="text-gray-400 hover:text-emerald-400 transition"><i class="fa-brands fa-discord"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-lime-400 transition"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-cyan-400 transition"><i class="fa-brands fa-telegram"></i></a>
                 </div>
             </div>
         </footer>
@@ -548,12 +1005,12 @@
 
 
     <!-- ========================================================================= -->
-    <!-- 3. MODAL VIP SEPARADO PARA DESCARGAR EL PROGRAMA PRINCIPAL -->
+    <!-- 3. MODAL VIP PARA DESCARGAR EL PROGRAMA PRINCIPAL                         -->
     <!-- ========================================================================= -->
     <div id="programDownloadModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 hidden">
-        <div class="bg-[#120726] border-2 border-yellow-400 rounded-3xl max-w-lg w-full p-6 md:p-8 relative border-neon-gold shadow-[0_0_50px_rgba(255,230,0,0.4)]">
+        <div class="bg-[#08120c] border-2 border-yellow-400 max-w-lg w-full p-6 md:p-8 relative shadow-[0_0_50px_rgba(255,230,0,0.4)]" style="clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);">
             
-            <button onclick="cerrarModalDescargaPrograma()" class="absolute top-4 right-4 text-gray-400 hover:text-yellow-400 text-2xl font-bold">
+            <button onclick="cerrarModalDescargaPrograma()" class="absolute top-4 right-5 text-gray-400 hover:text-yellow-400 text-2xl font-bold cursor-pointer">
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
@@ -571,16 +1028,16 @@
                         type="text" 
                         id="programKeyInput" 
                         placeholder="CLAVE VIP DE DESCARGA..." 
-                        class="w-full bg-[#1c0b3b] border-2 border-yellow-400/60 rounded-2xl px-4 py-3.5 text-center font-orbitron font-bold text-sm text-yellow-300 placeholder-purple-400 uppercase tracking-widest focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_20px_rgba(0,240,255,0.6)] transition"
+                        class="w-full bg-[#030705] border-2 border-yellow-400/70 px-4 py-3.5 text-center font-orbitron font-bold text-sm text-yellow-300 placeholder-yellow-700 uppercase tracking-widest focus:outline-none focus:border-emerald-400 focus:shadow-[0_0_20px_rgba(0,255,102,0.5)] transition"
                         required
                     >
                 </div>
 
-                <div id="programStatusMsg" class="hidden text-center p-3 rounded-xl font-orbitron text-xs"></div>
+                <div id="programStatusMsg" class="hidden text-center p-3 font-orbitron text-xs"></div>
 
                 <button 
                     type="submit" 
-                    class="btn-arcade w-full font-orbitron font-bold text-sm bg-gradient-to-r from-yellow-500 via-pink-600 to-cyan-500 hover:from-yellow-400 hover:to-cyan-400 text-white py-4 rounded-2xl border border-yellow-300 border-neon-gold shadow-lg uppercase flex items-center justify-center gap-2"
+                    class="btn-arcade w-full font-orbitron font-bold text-sm bg-gradient-to-r from-yellow-400 via-lime-400 to-emerald-400 hover:brightness-110 text-black py-4 shadow-lg uppercase flex items-center justify-center gap-2 cursor-pointer"
                 >
                     <i class="fa-solid fa-download"></i> VALIDAR Y DESCARGAR LAUNCHER
                 </button>
@@ -590,10 +1047,13 @@
 
 
     <!-- ========================================================================= -->
-    <!-- 4. LÓGICA JAVASCRIPT CON CONTROL DE 1 SOLO DISPOSITIVO POR CLAVE -->
+    <!-- 4. LÓGICA JAVASCRIPT UNIFICADA (BLOQUEO VIP + PESTAÑAS + CHISPAS + FILTROS)-->
     <!-- ========================================================================= -->
     <script>
-        // Tus claves válidas (puedes agregar o modificar las que ya tenías)
+        // 1. Renderiza los iconos vectoriales de Lucide
+        lucide.createIcons();
+
+        // 2. Lista exacta de tus claves VIP válidas
         const CLAVES_VIP_VALIDAS = [
             'NAIRB-2025-SSL1',
             'NAIRB-2025-MLA2',
@@ -609,66 +1069,88 @@
             'JESSY-2025-JHON'
         ];
 
+        // 3. Enlace original intacto de tu Programa Principal
         const ENLACE_PROGRAMA_PRINCIPAL = "https://uploadnow.io/f/Dg0jT16";
 
-        // Al cargar la página, verificamos si ESTE dispositivo ya fue autorizado previamente con una clave válida
+        // 4. Verifica al cargar la página si este dispositivo ya fue desbloqueado
         document.addEventListener("DOMContentLoaded", function() {
             const dispositivoAutorizado = localStorage.getItem("nairb_dispositivo_autorizado");
             const lockScreen = document.getElementById('entryLockScreen');
             const mainContent = document.getElementById('mainWebsiteContent');
 
             if (dispositivoAutorizado === "true") {
-                // Si ya ingresó antes en este mismo equipo, ocultamos el bloqueo directamente
                 lockScreen.classList.add('hidden');
                 mainContent.classList.remove('content-locked');
             }
         });
 
-        // A) VALIDACIÓN DE CLAVE PARA ACCESO INICIAL (1 Dispositivo por clave)
+        // 5. Validación de clave de acceso inicial (1 solo dispositivo por clave)
         function validarEntradaInicio(event) {
             event.preventDefault();
 
             const inputClave = document.getElementById('entryKeyInput').value.trim().toUpperCase();
             const statusMsg = document.getElementById('entryStatusMsg');
-
-            // Obtenemos el registro global de claves que ya fueron usadas en otros equipos
             let clavesUsadasGlobal = JSON.parse(localStorage.getItem("nairb_claves_usadas_global") || "[]");
 
             if (CLAVES_VIP_VALIDAS.includes(inputClave)) {
-                
-                // Verificamos si la clave ya fue gastada/usada en otro dispositivo
                 if (clavesUsadasGlobal.includes(inputClave)) {
-                    statusMsg.className = "text-center p-3 rounded-xl font-orbitron text-xs bg-red-500/20 border border-red-500 text-red-300 block";
+                    statusMsg.className = "text-center p-3 font-orbitron text-xs bg-red-500/20 border border-red-500 text-red-300 block";
                     statusMsg.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> ESTA CLAVE YA FUE USADA EN OTRO DISPOSITIVO.';
                     return;
                 }
 
-                // Si la clave es válida y nunca se había usado, la guardamos como usada globalmente
                 clavesUsadasGlobal.push(inputClave);
                 localStorage.setItem("nairb_claves_usadas_global", JSON.stringify(clavesUsadasGlobal));
-                
-                // Autorizamos este dispositivo para que no vuelva a pedir clave en el futuro
                 localStorage.setItem("nairb_dispositivo_autorizado", "true");
 
-                statusMsg.className = "text-center p-3 rounded-xl font-orbitron text-xs bg-green-500/20 border border-green-500 text-green-300 block";
+                statusMsg.className = "text-center p-3 font-orbitron text-xs bg-emerald-500/20 border border-emerald-400 text-emerald-300 block";
                 statusMsg.innerHTML = '<i class="fa-solid fa-circle-check"></i> ¡ACCESO CONCEDIDO! CARGANDO NAIRB GAMES...';
 
                 setTimeout(() => {
                     document.getElementById('entryLockScreen').classList.add('hidden');
                     document.getElementById('mainWebsiteContent').classList.remove('content-locked');
-                }, 1200);
-
+                }, 1000);
             } else {
-                statusMsg.className = "text-center p-3 rounded-xl font-orbitron text-xs bg-red-500/20 border border-red-500 text-red-300 block";
+                statusMsg.className = "text-center p-3 font-orbitron text-xs bg-red-500/20 border border-red-500 text-red-300 block";
                 statusMsg.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> CLAVE INCORRECTA. ACCESO DENEGADO.';
             }
         }
 
-        // B) MODAL DE DESCARGA DEL PROGRAMA PRINCIPAL
+        // 6. Control de cambio entre las pestañas Inicio, Juegos, Tutoriales y Contacto
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        function cambiarPestana(targetId) {
+            tabButtons.forEach(btn => {
+                if (btn.getAttribute('data-target') === targetId) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            tabContents.forEach(content => {
+                if (content.id === targetId) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetId = button.getAttribute('data-target');
+                cambiarPestana(targetId);
+            });
+        });
+
+        // 7. Modal de descarga del Programa Principal
         function abrirModalDescargaPrograma() {
             document.getElementById('programDownloadModal').classList.remove('hidden');
-            const statusMsg = document.getElementById('programStatusMsg');
-            statusMsg.classList.add('hidden');
+            document.getElementById('programStatusMsg').classList.add('hidden');
             document.getElementById('programKeyInput').value = '';
         }
 
@@ -684,53 +1166,52 @@
             let clavesUsadasGlobal = JSON.parse(localStorage.getItem("nairb_claves_usadas_global") || "[]");
 
             if (CLAVES_VIP_VALIDAS.includes(inputClave)) {
-                
-                // Si la clave no se había registrado aún, la registramos también al descargar
                 if (!clavesUsadasGlobal.includes(inputClave)) {
                     clavesUsadasGlobal.push(inputClave);
                     localStorage.setItem("nairb_claves_usadas_global", JSON.stringify(clavesUsadasGlobal));
                 }
 
-                statusMsg.className = "text-center p-3 rounded-xl font-orbitron text-xs bg-green-500/20 border border-green-500 text-green-300 block";
+                statusMsg.className = "text-center p-3 font-orbitron text-xs bg-emerald-500/20 border border-emerald-400 text-emerald-300 block";
                 statusMsg.innerHTML = '<i class="fa-solid fa-cloud-arrow-down"></i> ¡CLAVE CORRECTA! INICIANDO DESCARGA...';
 
                 setTimeout(() => {
                     window.open(ENLACE_PROGRAMA_PRINCIPAL, '_blank');
                     cerrarModalDescargaPrograma();
-                }, 1200);
+                }, 1000);
             } else {
-                statusMsg.className = "text-center p-3 rounded-xl font-orbitron text-xs bg-red-500/20 border border-red-500 text-red-300 block";
+                statusMsg.className = "text-center p-3 font-orbitron text-xs bg-red-500/20 border border-red-500 text-red-300 block";
                 statusMsg.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> CLAVE INVÁLIDA PARA DESCARGAR EL LAUNCHER.';
             }
         }
 
-        // C) FILTRADO POR BÚSQUEDA EN TIEMPO REAL
+        // 8. Buscador y filtros por marca de consola
         function filtrarConsolas() {
             const busqueda = document.getElementById('searchInput').value.toLowerCase();
             const tarjetas = document.querySelectorAll('.console-card');
 
             tarjetas.forEach(tarjeta => {
                 const nombreConsola = tarjeta.getAttribute('data-nombre').toLowerCase();
-                if (nombreConsola.includes(busqueda)) {
-                    tarjeta.style.display = "flex";
-                } else {
-                    tarjeta.style.display = "none";
-                }
+                tarjeta.style.display = nombreConsola.includes(busqueda) ? "flex" : "none";
             });
         }
 
-        // D) FILTRADO POR MARCAS (CATEGORÍAS)
         function filtrarCategoria(categoria) {
             const tarjetas = document.querySelectorAll('.console-card');
 
             tarjetas.forEach(tarjeta => {
                 const catConsola = tarjeta.getAttribute('data-categoria');
-                if (categoria === 'todas' || catConsola === categoria) {
-                    tarjeta.style.display = "flex";
-                } else {
-                    tarjeta.style.display = "none";
-                }
+                tarjeta.style.display = (categoria === 'todas' || catConsola === categoria) ? "flex" : "none";
             });
+        }
+
+        // 9. Genera chispas digitales verde neón cayendo en el fondo
+        for (let i = 0; i < 28; i++) {
+            const spark = document.createElement('div');
+            spark.classList.add('matrix-spark');
+            spark.style.left = Math.random() * 100 + 'vw';
+            spark.style.animationDuration = (Math.random() * 4 + 3) + 's';
+            spark.style.animationDelay = (Math.random() * 5) + 's';
+            document.body.appendChild(spark);
         }
     </script>
 </body>

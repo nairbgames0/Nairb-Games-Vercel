@@ -1,0 +1,1189 @@
+<!-- Define que el documento utiliza el estándar moderno HTML5 -->
+<!DOCTYPE html>
+<!-- Inicia la raíz del documento HTML y especifica que el idioma es español -->
+<html lang="es">
+<!-- Contiene los metadatos, título y estilos internos que configuran la página -->
+<head>
+    <!-- Establece la codificación UTF-8 para mostrar correctamente tildes, eñes y símbolos -->
+    <meta charset="UTF-8">
+    <!-- Configura el área visible para que la página sea adaptable (responsiva) en móviles y PC -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Define el título que se muestra en la pestaña del navegador web -->
+    <title>NAIRB GAMES - Plataforma Oficial</title>
+
+    <!-- Inicia el bloque de estilos CSS para el diseño visual y animaciones -->
+    <style>
+        /* Selector universal: reinicia márgenes y rellenos de todos los elementos HTML */
+        * {
+            margin: 0; /* Elimina cualquier margen exterior predeterminado */
+            padding: 0; /* Elimina cualquier relleno interior predeterminado */
+            box-sizing: border-box; /* Hace que el borde y el relleno no aumenten el tamaño final de las cajas */
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; /* Establece una fuente moderna y legible */
+        }
+
+        /* Habilita el desplazamiento suave cuando se navega entre anclas o secciones */
+        html {
+            scroll-behavior: smooth; /* Suaviza el movimiento del scroll vertical */
+        }
+
+        /* Estilos globales del cuerpo de la página */
+        body {
+            background-color: #090b0e; /* Color de fondo negro azulado muy oscuro */
+            color: #f3f4f6; /* Color blanco suave para todos los textos */
+            min-height: 100vh; /* Asegura que el cuerpo mida al menos el 100% de la altura de la ventana */
+            display: flex; /* Usa Flexbox para organizar la estructura principal */
+            overflow-x: hidden; /* Evita que aparezca una barra de desplazamiento horizontal indeseada */
+            position: relative; /* Permite posicionar elementos decorativos absolutos respecto al body */
+        }
+
+        /* Fondos laterales decorativos estilo arte gaming (como en la página de referencia) */
+        .bg-art-left, .bg-art-right {
+            position: fixed; /* Mantiene las ilustraciones fijas al hacer scroll */
+            top: 0; /* Las pega al borde superior de la pantalla */
+            bottom: 0; /* Las pega al borde inferior de la pantalla */
+            width: 22%; /* Ocupan el 22% del ancho en cada extremo */
+            z-index: 0; /* Las envía al fondo detrás del contenido principal */
+            opacity: 0.28; /* Las hace semitransparentes para no distraer la lectura */
+            pointer-events: none; /* Evita que interfieran con los clics del usuario */
+            background-size: cover; /* Ajusta la imagen para cubrir toda el área */
+            background-position: center; /* Centra la imagen de fondo */
+        }
+
+        /* Configuración específica de la ilustración izquierda */
+        .bg-art-left {
+            left: 0; /* Posiciona el contenedor en el borde izquierdo */
+            background-image: linear-gradient(to right, transparent 40%, #090b0e 100%), 
+                              url('https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=800&q=80'); /* Degradado hacia el centro + imagen gaming */
+        }
+
+        /* Configuración específica de la ilustración derecha */
+        .bg-art-right {
+            right: 0; /* Posiciona el contenedor en el borde derecho */
+            background-image: linear-gradient(to left, transparent 40%, #090b0e 100%), 
+                              url('https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80'); /* Degradado hacia el centro + imagen gaming */
+        }
+
+        /* Contenedor envolvente principal que centra la interfaz sobre los fondos laterales */
+        .app-layout {
+            display: flex; /* Alinea la barra lateral izquierda y el panel derecho lado a lado */
+            width: 100%; /* Ocupa todo el ancho disponible */
+            max-width: 1440px; /* Limita el ancho máximo en pantallas ultrawide */
+            margin: 0 auto; /* Centra todo el contenedor en la pantalla */
+            position: relative; /* Mantiene el contenido por encima de los fondos */
+            z-index: 1; /* Nivel superior al fondo decorativo */
+        }
+
+        /* Barra lateral izquierda fija (Sidebar) */
+        .sidebar {
+            width: 250px; /* Ancho fijo de la barra de navegación */
+            background-color: rgba(14, 17, 22, 0.92); /* Fondo oscuro ligeramente translúcido */
+            backdrop-filter: blur(10px); /* Efecto de desenfoque de cristal detrás del menú */
+            border-right: 1px solid #1f242d; /* Línea vertical divisoria a la derecha */
+            padding: 28px 18px; /* Espaciado interno */
+            display: flex; /* Activa Flexbox */
+            flex-direction: column; /* Apila los botones de arriba hacia abajo */
+            justify-content: space-between; /* Empuja el pie del menú hacia abajo */
+            position: sticky; /* Hace que el menú se quede pegado al hacer scroll */
+            top: 0; /* Se pega en la parte superior */
+            height: 100vh; /* Ocupa toda la altura visible de la ventana */
+        }
+
+        /* Contenedor del logotipo y enlaces superiores del sidebar */
+        .sidebar-top {
+            display: flex; /* Flexbox vertical */
+            flex-direction: column; /* Dirección en columna */
+            gap: 10px; /* Espacio uniforme entre cada opción del menú */
+        }
+
+        /* Estilo del logotipo textual NAIRB GAMES */
+        .logo-box {
+            padding: 10px 12px 22px 12px; /* Espaciado alrededor del logo */
+            border-bottom: 1px solid #1f242d; /* Línea separadora debajo del logo */
+            margin-bottom: 12px; /* Margen inferior */
+        }
+
+        /* Texto principal del logotipo */
+        .logo-box h1 {
+            font-size: 1.45rem; /* Tamaño grande y llamativo */
+            font-weight: 800; /* Letra extra gruesa */
+            letter-spacing: 1.5px; /* Espaciado entre letras */
+            background: linear-gradient(90deg, #38bdf8, #818cf8); /* Degradado azul a índigo */
+            -webkit-background-clip: text; /* Recorta el fondo a la forma del texto */
+            -webkit-text-fill-color: transparent; /* Hace transparente el relleno para ver el degradado */
+        }
+
+        /* Subtítulo pequeño debajo del logo */
+        .logo-box span {
+            font-size: 0.72rem; /* Tamaño pequeño */
+            color: #6b7280; /* Color gris medio */
+            letter-spacing: 1px; /* Espaciado entre letras */
+            text-transform: uppercase; /* Todo en mayúsculas */
+        }
+
+        /* Botones de navegación del menú lateral */
+        .nav-btn {
+            background: transparent; /* Fondo transparente por defecto */
+            border: none; /* Sin bordes */
+            color: #9ca3af; /* Color gris claro para opciones inactivas */
+            padding: 12px 14px; /* Relleno interno cómodo para hacer clic */
+            border-radius: 8px; /* Esquinas redondeadas */
+            text-align: left; /* Alinea el texto a la izquierda */
+            font-size: 0.92rem; /* Tamaño de letra */
+            font-weight: 500; /* Grosor medio */
+            cursor: pointer; /* Muestra la mano al pasar el ratón */
+            display: flex; /* Alinea ícono y texto */
+            align-items: center; /* Centra verticalmente */
+            gap: 12px; /* Espacio entre ícono y texto */
+            transition: all 0.2s ease; /* Animación suave de color y fondo */
+        }
+
+        /* Efecto hover y estado activo para los botones del menú */
+        .nav-btn:hover, .nav-btn.active {
+            background-color: #1c222b; /* Fondo gris azulado oscuro */
+            color: #ffffff; /* Texto blanco brillante */
+            border-left: 3px solid #38bdf8; /* Indicador azul brillante a la izquierda */
+        }
+
+        /* Tarjeta promocional o informativa en la parte inferior del menú lateral */
+        .sidebar-footer {
+            background-color: #13171e; /* Fondo oscuro */
+            border: 1px solid #232934; /* Borde sutil */
+            border-radius: 10px; /* Bordes redondeados */
+            padding: 14px; /* Espaciado interno */
+            font-size: 0.8rem; /* Letra pequeña */
+            color: #9ca3af; /* Color gris */
+        }
+
+        /* Área central de contenido donde se muestran las vistas */
+        .main-panel {
+            flex: 1; /* Toma todo el ancho restante */
+            background-color: rgba(13, 16, 21, 0.94); /* Fondo principal oscuro semitransparente */
+            padding: 35px 45px; /* Relleno interno amplio */
+            min-height: 100vh; /* Altura mínima completa */
+            overflow: hidden; /* Contiene los deslizamientos horizontales sin desbordar */
+        }
+
+        /* Clase utilitaria para ocultar las secciones/pestañas que no están activas */
+        .view-section {
+            display: none; /* Oculta la vista por defecto */
+            animation: fadeIn 0.35s ease; /* Aplica animación de aparición suave */
+        }
+
+        /* Muestra únicamente la vista que tenga la clase active-view */
+        .view-section.active-view {
+            display: block; /* Hace visible la sección */
+        }
+
+        /* Definición de la animación de entrada suave */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); } /* Empieza invisible y ligeramente abajo */
+            to { opacity: 1; transform: translateY(0); } /* Termina visible en su posición real */
+        }
+
+        /* Barra superior con título y buscador en tiempo real */
+        .top-header {
+            display: flex; /* Alinea título a la izquierda y buscador a la derecha */
+            justify-content: space-between; /* Separa ambos extremos */
+            align-items: flex-end; /* Alinea por la base */
+            flex-wrap: wrap; /* Permite que baje en pantallas pequeñas */
+            gap: 20px; /* Espacio si se apilan */
+            margin-bottom: 25px; /* Separación inferior */
+        }
+
+        /* Etiqueta azul superior ("BIBLIOTECA BASE") */
+        .eyebrow-tag {
+            color: #38bdf8; /* Color azul celeste */
+            font-size: 0.75rem; /* Tamaño pequeño */
+            font-weight: 700; /* Negrita */
+            letter-spacing: 1.2px; /* Espaciado entre letras */
+            text-transform: uppercase; /* Mayúsculas */
+            margin-bottom: 6px; /* Margen inferior */
+        }
+
+        /* Título principal de cada vista */
+        .section-heading {
+            font-size: 1.85rem; /* Tamaño grande */
+            font-weight: 700; /* Negrita */
+            color: #ffffff; /* Blanco puro */
+            margin-bottom: 6px; /* Espacio inferior */
+        }
+
+        /* Descripción debajo del título principal */
+        .section-desc {
+            color: #9ca3af; /* Gris claro */
+            font-size: 0.92rem; /* Tamaño estándar */
+        }
+
+        /* Caja del buscador de juegos */
+        .search-box {
+            position: relative; /* Permite posicionar la lupa dentro del input */
+            width: 280px; /* Ancho fijo del buscador */
+        }
+
+        /* Campo de texto del buscador */
+        .search-box input {
+            width: 100%; /* Ocupa todo el ancho de su contenedor */
+            background-color: #161b22; /* Fondo oscuro */
+            border: 1px solid #2a313d; /* Borde gris oscuro */
+            color: #ffffff; /* Texto blanco al escribir */
+            padding: 10px 15px 10px 38px; /* Espacio extra a la izquierda para el ícono */
+            border-radius: 8px; /* Esquinas redondeadas */
+            font-size: 0.9rem; /* Tamaño de letra */
+            outline: none; /* Quita el contorno azul predeterminado del navegador */
+            transition: border-color 0.2s; /* Transición suave */
+        }
+
+        /* Resalta el borde del buscador cuando el usuario hace clic para escribir */
+        .search-box input:focus {
+            border-color: #38bdf8; /* Borde azul celeste */
+        }
+
+        /* Ícono de lupa dentro del buscador */
+        .search-box span {
+            position: absolute; /* Posicionamiento libre dentro del input */
+            left: 12px; /* Distancia desde el borde izquierdo */
+            top: 50%; /* Centrado vertical */
+            transform: translateY(-50%); /* Ajuste fino del centrado vertical */
+            color: #6b7280; /* Color gris */
+            font-size: 0.9rem; /* Tamaño del ícono */
+        }
+
+        /* Banner ancho de colección (Estilo portada de consola/plataforma) */
+        .collection-banner {
+            background: linear-gradient(90deg, rgba(16, 20, 27, 0.96) 25%, rgba(16, 20, 27, 0.45) 100%),
+                        url('https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=80') center/cover; /* Fondo con degradado oscuro e imagen */
+            border: 1px solid #262d38; /* Borde general */
+            border-bottom: 2px solid #f59e0b; /* Línea naranja inferior característica */
+            border-radius: 12px; /* Esquinas redondeadas */
+            padding: 26px 30px; /* Relleno interno */
+            margin-bottom: 28px; /* Espacio inferior */
+            display: flex; /* Flexbox para alinear ícono, textos y flechas de deslizamiento */
+            justify-content: space-between; /* Separa info a la izquierda y controles a la derecha */
+            align-items: center; /* Centra verticalmente */
+            flex-wrap: wrap; /* Adaptable en móviles */
+            gap: 15px; /* Espacio entre elementos */
+        }
+
+        /* Contenedor izquierdo dentro del banner */
+        .banner-left {
+            display: flex; /* Alinea ícono cuadrado y textos */
+            align-items: center; /* Centra verticalmente */
+            gap: 18px; /* Separación entre ícono y texto */
+        }
+
+        /* Ícono cuadrado estilo Windows / Consola */
+        .platform-badge-icon {
+            width: 48px; /* Ancho */
+            height: 48px; /* Alto */
+            background-color: #ffffff; /* Fondo blanco */
+            border-radius: 8px; /* Esquinas redondeadas */
+            display: grid; /* Cuadrícula interna */
+            grid-template-columns: 1fr 1fr; /* 2 columnas */
+            gap: 3px; /* Separación entre cuadros */
+            padding: 5px; /* Margen interno */
+            flex-shrink: 0; /* Evita que se aplaste en pantallas pequeñas */
+        }
+
+        /* Cada cuadro negro dentro del ícono de plataforma */
+        .platform-badge-icon div {
+            background-color: #11141a; /* Color oscuro */
+            border-radius: 1px; /* Bordes levemente suavizados */
+        }
+
+        /* Controles de deslizamiento (Botones Izquierda / Derecha) */
+        .slider-controls {
+            display: flex; /* Alinea los dos botones horizontalmente */
+            gap: 10px; /* Espacio entre ambos botones */
+        }
+
+        /* Estilo de los botones circulares/cuadrados de deslizamiento */
+        .slide-arrow {
+            width: 38px; /* Ancho */
+            height: 38px; /* Alto */
+            border-radius: 8px; /* Bordes redondeados */
+            background-color: rgba(24, 29, 38, 0.9); /* Fondo oscuro */
+            border: 1px solid #323b49; /* Borde gris */
+            color: #ffffff; /* Flecha blanca */
+            font-size: 1.1rem; /* Tamaño de la flecha */
+            cursor: pointer; /* Manito al pasar el cursor */
+            display: flex; /* Centra el símbolo */
+            align-items: center; /* Centrado vertical */
+            justify-content: center; /* Centrado horizontal */
+            transition: all 0.2s ease; /* Animación suave */
+        }
+
+        /* Efecto hover en los botones de deslizamiento */
+        .slide-arrow:hover {
+            background-color: #38bdf8; /* Se ilumina en azul celeste */
+            color: #090b0e; /* Flecha oscura */
+            border-color: #38bdf8; /* Borde azul */
+        }
+
+        /* Contenedor deslizante (Carrusel horizontal con scroll suave) */
+        .carousel-track {
+            display: flex; /* Coloca todas las tarjetas en una sola fila horizontal */
+            gap: 20px; /* Espacio entre cada tarjeta */
+            overflow-x: auto; /* Permite deslizar horizontalmente */
+            scroll-behavior: smooth; /* Deslizamiento animado suave */
+            padding-bottom: 18px; /* Espacio inferior para la barra de scroll */
+            margin-bottom: 22px; /* Separación con la barra de descarga */
+            scrollbar-width: thin; /* Barra de desplazamiento delgada en Firefox */
+            scrollbar-color: #2e3746 #11141a; /* Colores de la barra en Firefox */
+        }
+
+        /* Personalización de la barra de deslizamiento horizontal en Chrome/Edge/Safari */
+        .carousel-track::-webkit-scrollbar {
+            height: 6px; /* Altura delgada de la barra horizontal */
+        }
+        .carousel-track::-webkit-scrollbar-track {
+            background: #11141a; /* Fondo del riel */
+            border-radius: 4px; /* Bordes redondeados */
+        }
+        .carousel-track::-webkit-scrollbar-thumb {
+            background: #2e3746; /* Color del deslizador */
+            border-radius: 4px; /* Bordes redondeados */
+        }
+        .carousel-track::-webkit-scrollbar-thumb:hover {
+            background: #38bdf8; /* Se ilumina en azul al arrastrarlo */
+        }
+
+        /* Tarjeta individual de cada videojuego */
+        .game-card {
+            min-width: 225px; /* Ancho mínimo fijo para que mantenga proporción vertical */
+            max-width: 225px; /* Ancho máximo fijo */
+            background-color: #141820; /* Fondo oscuro de la tarjeta */
+            border: 2px solid #222834; /* Borde gris oscuro */
+            border-radius: 10px; /* Esquinas redondeadas */
+            padding: 10px; /* Espaciado interno */
+            cursor: pointer; /* Cursor interactivo */
+            transition: all 0.25s ease; /* Animación de elevación y borde */
+            flex-shrink: 0; /* Impide que la tarjeta se encoja dentro del carrusel */
+            position: relative; /* Permite posicionar etiquetas internas */
+        }
+
+        /* Efecto hover al pasar el ratón por encima de una portada */
+        .game-card:hover {
+            transform: translateY(-5px); /* Eleva la tarjeta 5 píxeles */
+            border-color: #4b5563; /* Aclara el borde */
+        }
+
+        /* Estado activo: tarjeta seleccionada con borde azul brillante */
+        .game-card.selected {
+            border-color: #38bdf8; /* Borde azul neón */
+            background-color: #18202c; /* Fondo ligeramente más iluminado */
+            box-shadow: 0 8px 24px rgba(56, 189, 248, 0.22); /* Resplandor azul */
+        }
+
+        /* Etiqueta de peso o versión encima de la imagen */
+        .size-pill {
+            position: absolute; /* Flota sobre la esquina superior derecha de la portada */
+            top: 18px; /* Distancia desde arriba */
+            right: 18px; /* Distancia desde la derecha */
+            background-color: rgba(9, 11, 14, 0.85); /* Fondo negro semitransparente */
+            color: #38bdf8; /* Texto azul celeste */
+            font-size: 0.7rem; /* Letra muy pequeña */
+            font-weight: 700; /* Negrita */
+            padding: 3px 8px; /* Relleno compacto */
+            border-radius: 4px; /* Bordes redondeados */
+            border: 1px solid rgba(56, 189, 248, 0.3); /* Borde sutil azul */
+        }
+
+        /* Imagen de la portada del juego */
+        .game-card img {
+            width: 100%; /* Ocupa todo el ancho interior */
+            height: 285px; /* Altura fija estilo póster vertical */
+            object-fit: cover; /* Recorta la foto sin estirarla */
+            border-radius: 6px; /* Esquinas redondeadas */
+            margin-bottom: 12px; /* Separación con el título */
+            display: block; /* Elimina espacios fantasma debajo de la imagen */
+        }
+
+        /* Título del juego dentro de la tarjeta */
+        .game-title {
+            font-size: 0.96rem; /* Tamaño legible */
+            font-weight: 600; /* Semi-negrita */
+            color: #f3f4f6; /* Blanco suave */
+            padding-bottom: 6px; /* Espacio antes de la línea azul */
+            border-bottom: 2px solid #38bdf8; /* Subrayado azul característico */
+            display: inline-block; /* Ajusta el ancho de la línea al largo del texto */
+            white-space: nowrap; /* Evita que el título salte a dos líneas */
+            overflow: hidden; /* Oculta texto sobrante si es muy largo */
+            text-overflow: ellipsis; /* Pone puntos suspensivos (...) si se recorta */
+            max-width: 100%; /* No excede el ancho de la tarjeta */
+        }
+
+        /* Barra inferior de descarga (fija debajo del carrusel) */
+        .download-dock {
+            background-color: #131720; /* Fondo oscuro */
+            border: 1px solid #252c38; /* Borde gris */
+            border-radius: 12px; /* Esquinas redondeadas */
+            padding: 18px 25px; /* Relleno interno */
+            display: flex; /* Alinea información del juego y botones de descarga */
+            justify-content: space-between; /* Separa izquierda y derecha */
+            align-items: center; /* Centra verticalmente */
+            flex-wrap: wrap; /* Adapta en pantallas pequeñas */
+            gap: 20px; /* Espacio entre elementos */
+            margin-bottom: 45px; /* Separación con la siguiente sección */
+        }
+
+        /* Contenedor izquierdo de la barra de descarga (Miniatura + Textos) */
+        .dock-game-info {
+            display: flex; /* Flexbox horizontal */
+            align-items: center; /* Centra verticalmente */
+            gap: 16px; /* Espacio entre foto y texto */
+        }
+
+        /* Miniatura de la portada en la barra inferior */
+        .dock-game-info img {
+            width: 52px; /* Ancho pequeño */
+            height: 70px; /* Alto vertical */
+            object-fit: cover; /* Ajuste sin deformar */
+            border-radius: 6px; /* Bordes redondeados */
+            border: 1px solid #38bdf8; /* Borde azul */
+        }
+
+        /* Metadatos pequeños (Plataforma y peso) */
+        .dock-meta {
+            font-size: 0.78rem; /* Letra pequeña */
+            color: #9ca3af; /* Gris */
+            margin-bottom: 3px; /* Espacio inferior */
+        }
+
+        /* Nombre grande del juego seleccionado en la barra inferior */
+        .dock-title {
+            font-size: 1.2rem; /* Tamaño grande */
+            font-weight: 700; /* Negrita */
+            color: #ffffff; /* Blanco */
+        }
+
+        /* Grupo de botones de descarga (Enlace Principal + Enlace Alternativo) */
+        .dock-actions {
+            display: flex; /* Alinea los botones lado a lado */
+            gap: 12px; /* Espacio entre botones */
+            flex-wrap: wrap; /* Permite apilar en móviles */
+        }
+
+        /* Botón principal azul de descarga */
+        .btn-primary-dl {
+            background-color: #60a5fa; /* Azul claro brillante */
+            color: #090d16; /* Texto oscuro de alto contraste */
+            text-decoration: none; /* Sin subrayado */
+            padding: 12px 24px; /* Relleno amplio */
+            border-radius: 8px; /* Bordes redondeados */
+            font-weight: 700; /* Negrita */
+            font-size: 0.92rem; /* Tamaño de letra */
+            display: inline-flex; /* Alinea ícono y texto */
+            align-items: center; /* Centra verticalmente */
+            gap: 8px; /* Espacio entre ícono y texto */
+            transition: all 0.2s ease; /* Animación suave */
+        }
+
+        /* Efecto hover del botón principal */
+        .btn-primary-dl:hover {
+            background-color: #93c5fd; /* Azul más claro */
+            transform: translateY(-2px); /* Ligera elevación */
+        }
+
+        /* Botón secundario (Mirror / Enlace alternativo) */
+        .btn-secondary-dl {
+            background-color: #1e2532; /* Fondo gris azulado */
+            color: #e5e7eb; /* Texto blanco */
+            border: 1px solid #333e52; /* Borde sutil */
+            text-decoration: none; /* Sin subrayado */
+            padding: 12px 18px; /* Relleno */
+            border-radius: 8px; /* Bordes redondeados */
+            font-weight: 600; /* Semi-negrita */
+            font-size: 0.9rem; /* Tamaño de letra */
+            display: inline-flex; /* Alinea ícono y texto */
+            align-items: center; /* Centra verticalmente */
+            gap: 8px; /* Espacio entre ícono y texto */
+            transition: all 0.2s ease; /* Transición suave */
+        }
+
+        /* Efecto hover del botón secundario */
+        .btn-secondary-dl:hover {
+            background-color: #283244; /* Fondo ligeramente más claro */
+            border-color: #60a5fa; /* Borde azul */
+        }
+
+        /* Estilos para los formularios de las pestañas "Sugerencias" y "Contacto" */
+        .form-card {
+            background-color: #141820; /* Fondo oscuro */
+            border: 1px solid #242b37; /* Borde sutil */
+            border-radius: 12px; /* Esquinas redondeadas */
+            padding: 30px; /* Relleno interno */
+            max-width: 650px; /* Ancho máximo cómodo para leer y escribir */
+            margin-top: 20px; /* Espacio superior */
+        }
+
+        /* Grupo de etiqueta + campo de formulario */
+        .form-group {
+            margin-bottom: 18px; /* Separación entre campos */
+        }
+
+        /* Etiqueta de texto encima de cada input */
+        .form-group label {
+            display: block; /* Ocupa toda la línea */
+            font-size: 0.88rem; /* Tamaño de letra */
+            color: #d1d5db; /* Gris muy claro */
+            margin-bottom: 8px; /* Espacio antes del campo */
+            font-weight: 600; /* Semi-negrita */
+        }
+
+        /* Campos de entrada de texto, selectores y áreas de texto */
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; /* Ancho completo */
+            background-color: #0d1015; /* Fondo muy oscuro */
+            border: 1px solid #2b3342; /* Borde gris */
+            border-radius: 8px; /* Esquinas redondeadas */
+            padding: 12px 14px; /* Relleno interno */
+            color: #ffffff; /* Texto blanco */
+            font-size: 0.92rem; /* Tamaño de letra */
+            outline: none; /* Sin contorno por defecto */
+        }
+
+        /* Resaltado azul al escribir en los formularios */
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: #38bdf8; /* Borde azul celeste */
+        }
+
+        /* Botón de envío de formularios */
+        .btn-submit {
+            background-color: #38bdf8; /* Azul celeste */
+            color: #090b0e; /* Texto oscuro */
+            border: none; /* Sin borde */
+            padding: 12px 26px; /* Relleno */
+            border-radius: 8px; /* Esquinas redondeadas */
+            font-weight: 700; /* Negrita */
+            font-size: 0.95rem; /* Tamaño de letra */
+            cursor: pointer; /* Manito al pasar el ratón */
+            transition: background 0.2s; /* Transición */
+        }
+
+        /* Efecto hover del botón enviar */
+        .btn-submit:hover {
+            background-color: #7dd3fc; /* Azul más claro */
+        }
+
+        /* Mensaje de confirmación oculto hasta que se envía un formulario */
+        .toast-msg {
+            margin-top: 15px; /* Margen superior */
+            padding: 12px 16px; /* Relleno */
+            border-radius: 8px; /* Bordes redondeados */
+            background-color: rgba(16, 185, 129, 0.15); /* Fondo verde translúcido */
+            border: 1px solid #10b981; /* Borde verde */
+            color: #6ee7b7; /* Texto verde claro */
+            font-size: 0.9rem; /* Tamaño de letra */
+            display: none; /* Oculto inicialmente */
+        }
+
+        /* Reglas responsivas para dispositivos móviles (pantallas menores a 850px) */
+        @media (max-width: 850px) {
+            .app-layout {
+                flex-direction: column; /* Apila el menú arriba y el contenido abajo */
+            }
+            .sidebar {
+                width: 100%; /* El menú ocupa todo el ancho */
+                height: auto; /* Altura automática */
+                position: relative; /* Deja de ser fijo */
+                border-right: none; /* Quita borde derecho */
+                border-bottom: 1px solid #1f242d; /* Pone borde inferior */
+            }
+            .sidebar-footer {
+                display: none; /* Oculta el cuadro inferior en móviles para ahorrar espacio */
+            }
+            .main-panel {
+                padding: 25px 20px; /* Reduce el relleno en pantallas pequeñas */
+            }
+            .bg-art-left, .bg-art-right {
+                display: none; /* Oculta los fondos laterales en móviles */
+            }
+        }
+    </style>
+<!-- Finaliza el bloque de estilos CSS -->
+</head>
+
+<!-- Inicia el cuerpo visible de la aplicación web -->
+<body>
+
+    <!-- Ilustración decorativa fija en el extremo izquierdo -->
+    <div class="bg-art-left"></div>
+    <!-- Ilustración decorativa fija en el extremo derecho -->
+    <div class="bg-art-right"></div>
+
+    <!-- Contenedor maestro que estructura el menú lateral y el área de contenido -->
+    <div class="app-layout">
+
+        <!-- BARRA LATERAL DE NAVEGACIÓN (SIDEBAR) -->
+        <aside class="sidebar">
+            <!-- Grupo superior con el logo y las pestañas de navegación -->
+            <div class="sidebar-top">
+                <!-- Identidad de la marca NAIRB GAMES -->
+                <div class="logo-box">
+                    <h1>NAIRB GAMES</h1>
+                    <span>Biblioteca Digital</span>
+                </div>
+
+                <!-- Botón 1: Muestra el catálogo principal con deslizamientos -->
+                <button class="nav-btn active" onclick="cambiarVista('vista-catalogo', this)">
+                    🎮 Colecciones completas
+                </button>
+
+                <!-- Botón 2: Muestra el catálogo extendido / Clásicos Retro -->
+                <button class="nav-btn" onclick="cambiarVista('vista-retro', this)">
+                    🕹️ Clásicos & Emuladores
+                </button>
+
+                <!-- Botón 3: Muestra el formulario para pedir juegos -->
+                <button class="nav-btn" onclick="cambiarVista('vista-sugerencias', this)">
+                    💬 Sugerencias
+                </button>
+
+                <!-- Botón 4: Muestra la sección de contacto y soporte -->
+                <button class="nav-btn" onclick="cambiarVista('vista-contacto', this)">
+                    ✉️ Contacto
+                </button>
+            </div>
+
+            <!-- Bloque informativo en la parte inferior de la barra lateral -->
+            <div class="sidebar-footer">
+                <strong style="color: #f3f4f6; display: block; margin-bottom: 4px;">NAIRB GAMES v2.0</strong>
+                Enlaces verificados y libres de publicidad invasiva. Haz clic en cualquier portada para descargar.
+            </div>
+        </aside>
+
+        <!-- PANEL PRINCIPAL DERECHO -->
+        <main class="main-panel">
+
+            <!-- ===================================================================== -->
+            <!-- VISTA 1: COLECCIONES COMPLETAS (CATÁLOGO PRINCIPAL)                   -->
+            <!-- ===================================================================== -->
+            <section id="vista-catalogo" class="view-section active-view">
+                
+                <!-- Encabezado con título y buscador instantáneo -->
+                <div class="top-header">
+                    <div>
+                        <div class="eyebrow-tag">BIBLIOTECA BASE</div>
+                        <h2 class="section-heading">🎮 Catálogo principal</h2>
+                        <p class="section-desc">La colección principal de cada plataforma, desliza para explorar y selecciona un juego.</p>
+                    </div>
+
+                    <!-- Buscador que filtra las tarjetas por nombre en tiempo real -->
+                    <div class="search-box">
+                        <span>🔍</span>
+                        <input type="text" id="buscadorJuegos" onkeyup="filtrarJuegos()" placeholder="Buscar juego en NAIRB GAMES...">
+                    </div>
+                </div>
+
+                <!-- BANNER DE COLECCIÓN 1: WINDOWS PC -->
+                <div class="collection-banner">
+                    <div class="banner-left">
+                        <!-- Ícono cuadrado estilo Windows -->
+                        <div class="platform-badge-icon">
+                            <div></div><div></div><div></div><div></div>
+                        </div>
+                        <div>
+                            <div class="eyebrow-tag" style="margin-bottom: 2px;">COLECCIÓN / EDICIÓN COMPLETA</div>
+                            <h3 style="font-size: 1.35rem; color: #fff;">Colección Windows PC</h3>
+                        </div>
+                    </div>
+
+                    <!-- Botones para deslizar el carrusel hacia izquierda o derecha -->
+                    <div class="slider-controls">
+                        <button class="slide-arrow" onclick="deslizarCarrusel('carrusel-pc', -480)" title="Deslizar izquierda">◀</button>
+                        <button class="slide-arrow" onclick="deslizarCarrusel('carrusel-pc', 480)" title="Deslizar derecha">▶</button>
+                    </div>
+                </div>
+
+                <!-- CARRUSEL DESLIZANTE 1: JUEGOS DE PC -->
+                <!-- Puedes agregar tantas tarjetas <article> como quieras; el deslizamiento es automático -->
+                <div class="carousel-track" id="carrusel-pc">
+
+                    <!-- JUEGO 1: HALF-LIFE -->
+                    <!-- IMPORTANTE: Cambia 'data-link1' (Enlace Principal) y 'data-link2' (Enlace Alternativo) por tus URLs -->
+                    <article class="game-card selected"
+                             onclick="seleccionarJuego(this, 'pc')"
+                             data-title="Half-Life: Complete Edition"
+                             data-meta="Windows PC • 1.2 GB • Español / Inglés"
+                             data-img="https://cdn.cloudflare.steamstatic.com/steam/apps/70/library_600x900.jpg"
+                             data-link1="https://TU-LINK-AQUI.com/descargar-half-life"
+                             data-link2="https://TU-LINK-ALTERNATIVO.com/half-life-mirror">
+                        <span class="size-pill">1.2 GB</span>
+                        <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/70/library_600x900.jpg" alt="Half-Life">
+                        <div class="game-title">Half-Life</div>
+                    </article>
+
+                    <!-- JUEGO 2: AGE OF EMPIRES II -->
+                    <article class="game-card"
+                             onclick="seleccionarJuego(this, 'pc')"
+                             data-title="Age of Empires II: Definitive"
+                             data-meta="Windows PC • 4.8 GB • Multilenguaje"
+                             data-img="https://cdn.cloudflare.steamstatic.com/steam/apps/813780/library_600x900.jpg"
+                             data-link1="https://TU-LINK-AQUI.com/descargar-aoe2"
+                             data-link2="https://TU-LINK-ALTERNATIVO.com/aoe2-mirror">
+                        <span class="size-pill">4.8 GB</span>
+                        <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/813780/library_600x900.jpg" alt="Age of Empires II">
+                        <div class="game-title">Age of Empires II</div>
+                    </article>
+
+                    <!-- JUEGO 3: DOOM -->
+                    <article class="game-card"
+                             onclick="seleccionarJuego(this, 'pc')"
+                             data-title="DOOM + DOOM II Classic Pack"
+                             data-meta="Windows PC • 650 MB • Portable"
+                             data-img="https://cdn.cloudflare.steamstatic.com/steam/apps/2280/library_600x900.jpg"
+                             data-link1="https://TU-LINK-AQUI.com/descargar-doom"
+                             data-link2="https://TU-LINK-ALTERNATIVO.com/doom-mirror">
+                        <span class="size-pill">650 MB</span>
+                        <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/2280/library_600x900.jpg" alt="Doom">
+                        <div class="game-title">Doom</div>
+                    </article>
+
+                    <!-- JUEGO 4: WARCRAFT III -->
+                    <article class="game-card"
+                             onclick="seleccionarJuego(this, 'pc')"
+                             data-title="Warcraft III: Reign of Chaos + Frozen Throne"
+                             data-meta="Windows PC • 2.1 GB • Español Voces"
+                             data-img="https://upload.wikimedia.org/wikipedia/en/6/66/WarcraftIII.jpg"
+                             data-link1="https://TU-LINK-AQUI.com/descargar-warcraft3"
+                             data-link2="https://TU-LINK-ALTERNATIVO.com/warcraft3-mirror">
+                        <span class="size-pill">2.1 GB</span>
+                        <img src="https://upload.wikimedia.org/wikipedia/en/6/66/WarcraftIII.jpg" alt="Warcraft III">
+                        <div class="game-title">Warcraft III</div>
+                    </article>
+
+                    <!-- JUEGO 5: COUNTER-STRIKE 1.6 (Extra para demostrar el deslizamiento horizontal) -->
+                    <article class="game-card"
+                             onclick="seleccionarJuego(this, 'pc')"
+                             data-title="Counter-Strike 1.6 No-Steam"
+                             data-meta="Windows PC • 480 MB • Online + Bots"
+                             data-img="https://cdn.cloudflare.steamstatic.com/steam/apps/10/library_600x900.jpg"
+                             data-link1="https://TU-LINK-AQUI.com/descargar-cs16"
+                             data-link2="https://TU-LINK-ALTERNATIVO.com/cs16-mirror">
+                        <span class="size-pill">480 MB</span>
+                        <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/10/library_600x900.jpg" alt="Counter-Strike 1.6">
+                        <div class="game-title">Counter-Strike 1.6</div>
+                    </article>
+
+                    <!-- JUEGO 6: LEFT 4 DEAD 2 (Extra para demostrar el deslizamiento horizontal) -->
+                    <article class="game-card"
+                             onclick="seleccionarJuego(this, 'pc')"
+                             data-title="Left 4 Dead 2: The Last Stand"
+                             data-meta="Windows PC • 13.5 GB • Cooperativo"
+                             data-img="https://cdn.cloudflare.steamstatic.com/steam/apps/550/library_600x900.jpg"
+                             data-link1="https://TU-LINK-AQUI.com/descargar-l4d2"
+                             data-link2="https://TU-LINK-ALTERNATIVO.com/l4d2-mirror">
+                        <span class="size-pill">13.5 GB</span>
+                        <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/550/library_600x900.jpg" alt="Left 4 Dead 2">
+                        <div class="game-title">Left 4 Dead 2</div>
+                    </article>
+
+                </div>
+
+                <!-- BARRA DE DESCARGA DINÁMICA PARA LA COLECCIÓN PC -->
+                <div class="download-dock">
+                    <div class="dock-game-info">
+                        <!-- Imagen miniatura que cambia al seleccionar un juego -->
+                        <img id="pc-dock-img" src="https://cdn.cloudflare.steamstatic.com/steam/apps/70/library_600x900.jpg" alt="Seleccionado">
+                        <div>
+                            <!-- Detalles técnicos que cambian según el juego -->
+                            <div id="pc-dock-meta" class="dock-meta">Windows PC • 1.2 GB • Español / Inglés</div>
+                            <!-- Título del juego seleccionado -->
+                            <div id="pc-dock-title" class="dock-title">Half-Life: Complete Edition</div>
+                        </div>
+                    </div>
+
+                    <!-- Botones donde se insertan automáticamente los links del juego elegido -->
+                    <div class="dock-actions">
+                        <!-- Botón 1: Enlace de descarga principal -->
+                        <a id="pc-dock-link1" href="https://TU-LINK-AQUI.com/descargar-half-life" target="_blank" class="btn-primary-dl">
+                            ⬇️ Descargar colección
+                        </a>
+                        <!-- Botón 2: Enlace espejo / servidor alternativo -->
+                        <a id="pc-dock-link2" href="https://TU-LINK-ALTERNATIVO.com/half-life-mirror" target="_blank" class="btn-secondary-dl">
+                            🔗 Link Alternativo
+                        </a>
+                    </div>
+                </div>
+
+                <!-- ================================================================= -->
+                <!-- SEGUNDO BLOQUE DESLIZANTE: COLECCIÓN ACCIÓN & SUPERVIVENCIA       -->
+                <!-- ================================================================= -->
+                <div class="collection-banner" style="border-bottom-color: #38bdf8;">
+                    <div class="banner-left">
+                        <div class="platform-badge-icon" style="background-color: #38bdf8;">
+                            <div></div><div></div><div></div><div></div>
+                        </div>
+                        <div>
+                            <div class="eyebrow-tag" style="margin-bottom: 2px;">COLECCIÓN DESTACADA</div>
+                            <h3 style="font-size: 1.35rem; color: #fff;">Acción & Mundo Abierto</h3>
+                        </div>
+                    </div>
+
+                    <!-- Controles de deslizamiento del segundo carrusel -->
+                    <div class="slider-controls">
+                        <button class="slide-arrow" onclick="deslizarCarrusel('carrusel-accion', -480)" title="Deslizar izquierda">◀</button>
+                        <button class="slide-arrow" onclick="deslizarCarrusel('carrusel-accion', 480)" title="Deslizar derecha">▶</button>
+                    </div>
+                </div>
+
+                <!-- CARRUSEL DESLIZANTE 2 -->
+                <div class="carousel-track" id="carrusel-accion">
+
+                    <!-- JUEGO A1: GTA SAN ANDREAS -->
+                    <article class="game-card selected"
+                             onclick="seleccionarJuego(this, 'accion')"
+                             data-title="Grand Theft Auto: San Andreas"
+                             data-meta="Windows PC • 3.9 GB • Español"
+                             data-img="https://cdn.cloudflare.steamstatic.com/steam/apps/12120/library_600x900.jpg"
+                             data-link1="https://TU-LINK-AQUI.com/descargar-gta-sa"
+                             data-link2="https://TU-LINK-ALTERNATIVO.com/gta-sa-mirror">
+                        <span class="size-pill">3.9 GB</span>
+                        <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/12120/library_600x900.jpg" alt="GTA San Andreas">
+                        <div class="game-title">GTA: San Andreas</div>
+                    </article>
+
+                    <!-- JUEGO A2: RESIDENT EVIL 4 -->
+                    <article class="game-card"
+                             onclick="seleccionarJuego(this, 'accion')"
+                             data-title="Resident Evil 4 (2005 HD Edition)"
+                             data-meta="Windows PC • 7.4 GB • Textos Español"
+                             data-img="https://cdn.cloudflare.steamstatic.com/steam/apps/254700/library_600x900.jpg"
+                             data-link1="https://TU-LINK-AQUI.com/descargar-re4"
+                             data-link2="https://TU-LINK-ALTERNATIVO.com/re4-mirror">
+                        <span class="size-pill">7.4 GB</span>
+                        <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/254700/library_600x900.jpg" alt="Resident Evil 4">
+                        <div class="game-title">Resident Evil 4</div>
+                    </article>
+
+                    <!-- JUEGO A3: PORTAL 2 -->
+                    <article class="game-card"
+                             onclick="seleccionarJuego(this, 'accion')"
+                             data-title="Portal 2: Edición Completa"
+                             data-meta="Windows PC • 6.8 GB • Voces Español"
+                             data-img="https://cdn.cloudflare.steamstatic.com/steam/apps/620/library_600x900.jpg"
+                             data-link1="https://TU-LINK-AQUI.com/descargar-portal2"
+                             data-link2="https://TU-LINK-ALTERNATIVO.com/portal2-mirror">
+                        <span class="size-pill">6.8 GB</span>
+                        <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/620/library_600x900.jpg" alt="Portal 2">
+                        <div class="game-title">Portal 2</div>
+                    </article>
+
+                    <!-- JUEGO A4: TERRARIA -->
+                    <article class="game-card"
+                             onclick="seleccionarJuego(this, 'accion')"
+                             data-title="Terraria v1.4.4"
+                             data-meta="Windows PC • 450 MB • Multijugador"
+                             data-img="https://cdn.cloudflare.steamstatic.com/steam/apps/105600/library_600x900.jpg"
+                             data-link1="https://TU-LINK-AQUI.com/descargar-terraria"
+                             data-link2="https://TU-LINK-ALTERNATIVO.com/terraria-mirror">
+                        <span class="size-pill">450 MB</span>
+                        <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/105600/library_600x900.jpg" alt="Terraria">
+                        <div class="game-title">Terraria</div>
+                    </article>
+
+                    <!-- JUEGO A5: FALLOUT NEW VEGAS -->
+                    <article class="game-card"
+                             onclick="seleccionarJuego(this, 'accion')"
+                             data-title="Fallout: New Vegas Ultimate"
+                             data-meta="Windows PC • 8.2 GB • Todos los DLC"
+                             data-img="https://cdn.cloudflare.steamstatic.com/steam/apps/22380/library_600x900.jpg"
+                             data-link1="https://TU-LINK-AQUI.com/descargar-fallout-nv"
+                             data-link2="https://TU-LINK-ALTERNATIVO.com/fallout-nv-mirror">
+                        <span class="size-pill">8.2 GB</span>
+                        <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/22380/library_600x900.jpg" alt="Fallout New Vegas">
+                        <div class="game-title">Fallout: New Vegas</div>
+                    </article>
+
+                </div>
+
+                <!-- BARRA DE DESCARGA DINÁMICA PARA EL SEGUNDO CARRUSEL -->
+                <div class="download-dock">
+                    <div class="dock-game-info">
+                        <img id="accion-dock-img" src="https://cdn.cloudflare.steamstatic.com/steam/apps/12120/library_600x900.jpg" alt="Seleccionado">
+                        <div>
+                            <div id="accion-dock-meta" class="dock-meta">Windows PC • 3.9 GB • Español</div>
+                            <div id="accion-dock-title" class="dock-title">Grand Theft Auto: San Andreas</div>
+                        </div>
+                    </div>
+
+                    <div class="dock-actions">
+                        <a id="accion-dock-link1" href="https://TU-LINK-AQUI.com/descargar-gta-sa" target="_blank" class="btn-primary-dl">
+                            ⬇️ Descargar juego
+                        </a>
+                        <a id="accion-dock-link2" href="https://TU-LINK-ALTERNATIVO.com/gta-sa-mirror" target="_blank" class="btn-secondary-dl">
+                            🔗 Link Alternativo
+                        </a>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- ===================================================================== -->
+            <!-- VISTA 2: CLÁSICOS & EMULADORES                                        -->
+            <!-- ===================================================================== -->
+            <section id="vista-retro" class="view-section">
+                <div class="top-header">
+                    <div>
+                        <div class="eyebrow-tag">CONSOLAS CLÁSICAS</div>
+                        <h2 class="section-heading">🕹️ Clásicos & Emuladores</h2>
+                        <p class="section-desc">Paquetes listos para jugar con emulador preconfigurado incluido.</p>
+                    </div>
+                </div>
+
+                <div class="collection-banner" style="border-bottom-color: #10b981;">
+                    <div class="banner-left">
+                        <div class="platform-badge-icon" style="background-color: #10b981;">
+                            <div></div><div></div><div></div><div></div>
+                        </div>
+                        <div>
+                            <div class="eyebrow-tag" style="margin-bottom: 2px;">PACKS PORTABLES</div>
+                            <h3 style="font-size: 1.35rem; color: #fff;">Selección Retro Arcade & Consola</h3>
+                        </div>
+                    </div>
+                    <div class="slider-controls">
+                        <button class="slide-arrow" onclick="deslizarCarrusel('carrusel-retro', -480)">◀</button>
+                        <button class="slide-arrow" onclick="deslizarCarrusel('carrusel-retro', 480)">▶</button>
+                    </div>
+                </div>
+
+                <div class="carousel-track" id="carrusel-retro">
+                    <article class="game-card selected"
+                             onclick="seleccionarJuego(this, 'retro')"
+                             data-title="Metal Slug Anthology (PC + Arcade)"
+                             data-meta="Emulador Incluido • 890 MB • 1-2 Jugadores"
+                             data-img="https://cdn.cloudflare.steamstatic.com/steam/apps/366250/library_600x900.jpg"
+                             data-link1="https://TU-LINK-AQUI.com/descargar-metalslug"
+                             data-link2="https://TU-LINK-ALTERNATIVO.com/metalslug-mirror">
+                        <span class="size-pill">890 MB</span>
+                        <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/366250/library_600x900.jpg" alt="Metal Slug">
+                        <div class="game-title">Metal Slug Pack</div>
+                    </article>
+
+                    <article class="game-card"
+                             onclick="seleccionarJuego(this, 'retro')"
+                             data-title="The King of Fighters 2002 Magic Plus"
+                             data-meta="Arcade NeoGeo • 180 MB • Portable"
+                             data-img="https://cdn.cloudflare.steamstatic.com/steam/apps/222440/library_600x900.jpg"
+                             data-link1="https://TU-LINK-AQUI.com/descargar-kof2002"
+                             data-link2="https://TU-LINK-ALTERNATIVO.com/kof2002-mirror">
+                        <span class="size-pill">180 MB</span>
+                        <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/222440/library_600x900.jpg" alt="KOF 2002">
+                        <div class="game-title">KOF 2002</div>
+                    </article>
+
+                    <article class="game-card"
+                             onclick="seleccionarJuego(this, 'retro')"
+                             data-title="Sonic Mania Plus"
+                             data-meta="Windows PC • 390 MB • 60 FPS"
+                             data-img="https://cdn.cloudflare.steamstatic.com/steam/apps/584400/library_600x900.jpg"
+                             data-link1="https://TU-LINK-AQUI.com/descargar-sonic-mania"
+                             data-link2="https://TU-LINK-ALTERNATIVO.com/sonic-mirror">
+                        <span class="size-pill">390 MB</span>
+                        <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/584400/library_600x900.jpg" alt="Sonic Mania">
+                        <div class="game-title">Sonic Mania</div>
+                    </article>
+                </div>
+
+                <div class="download-dock">
+                    <div class="dock-game-info">
+                        <img id="retro-dock-img" src="https://cdn.cloudflare.steamstatic.com/steam/apps/366250/library_600x900.jpg" alt="Seleccionado">
+                        <div>
+                            <div id="retro-dock-meta" class="dock-meta">Emulador Incluido • 890 MB • 1-2 Jugadores</div>
+                            <div id="retro-dock-title" class="dock-title">Metal Slug Anthology (PC + Arcade)</div>
+                        </div>
+                    </div>
+                    <div class="dock-actions">
+                        <a id="retro-dock-link1" href="https://TU-LINK-AQUI.com/descargar-metalslug" target="_blank" class="btn-primary-dl">
+                            ⬇️ Descargar pack
+                        </a>
+                        <a id="retro-dock-link2" href="https://TU-LINK-ALTERNATIVO.com/metalslug-mirror" target="_blank" class="btn-secondary-dl">
+                            🔗 Link Alternativo
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===================================================================== -->
+            <!-- VISTA 3: SUGERENCIAS DE JUEGOS (Igual al menú de la referencia)       -->
+            <!-- ===================================================================== -->
+            <section id="vista-sugerencias" class="view-section">
+                <div class="eyebrow-tag">COMUNIDAD NAIRB GAMES</div>
+                <h2 class="section-heading">💬 Sugerencias de juegos</h2>
+                <p class="section-desc">¿Buscas algún título clásico o colección que aún no está en el catálogo? Pídelo aquí.</p>
+
+                <!-- Formulario interactivo para enviar sugerencias -->
+                <form class="form-card" onsubmit="enviarFormulario(event, 'toast-sugerencia')">
+                    <div class="form-group">
+                        <label for="nombre-juego">Nombre del videojuego o saga</label>
+                        <input type="text" id="nombre-juego" required placeholder="Ej: Need for Speed Most Wanted (2005)">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="plataforma-juego">Plataforma deseada</label>
+                        <select id="plataforma-juego">
+                            <option value="pc">Windows PC</option>
+                            <option value="ps2">PlayStation 2 / Emulador</option>
+                            <option value="retro">Arcade / Consola Retro</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="detalles-juego">Detalles adicionales (Idioma, edición, etc.)</label>
+                        <textarea id="detalles-juego" rows="4" placeholder="Escribe si prefieres versión portable, instalador o algún DLC específico..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Enviar sugerencia a NAIRB GAMES</button>
+
+                    <!-- Alerta de confirmación que aparece al enviar -->
+                    <div id="toast-sugerencia" class="toast-msg">
+                        ✅ ¡Gracias! Tu sugerencia ha sido registrada en la lista de próximos aportes de NAIRB GAMES.
+                    </div>
+                </form>
+            </section>
+
+            <!-- ===================================================================== -->
+            <!-- VISTA 4: CONTACTO & REPORTAR ENLACES CAÍDOS                           -->
+            <!-- ===================================================================== -->
+            <section id="vista-contacto" class="view-section">
+                <div class="eyebrow-tag">SOPORTE TÉCNICO</div>
+                <h2 class="section-heading">✉️ Contacto y Reportes</h2>
+                <p class="section-desc">Comunícate con el administrador de NAIRB GAMES para reportar enlaces caídos o dudas.</p>
+
+                <form class="form-card" onsubmit="enviarFormulario(event, 'toast-contacto')">
+                    <div class="form-group">
+                        <label for="usuario-nombre">Tu nombre o apodo</label>
+                        <input type="text" id="usuario-nombre" required placeholder="Ej: Gamer2026">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="motivo-contacto">Motivo del mensaje</label>
+                        <select id="motivo-contacto">
+                            <option value="link-caido">Reportar enlace de descarga caído</option>
+                            <option value="consulta">Consulta sobre instalación</option>
+                            <option value="colaboracion">Colaboración / Otros</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="mensaje-contacto">Mensaje</label>
+                        <textarea id="mensaje-contacto" rows="4" required placeholder="Indica el nombre del juego y el problema encontrado..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Enviar mensaje</button>
+
+                    <div id="toast-contacto" class="toast-msg">
+                        ✅ Mensaje enviado correctamente. Revisaremos tu solicitud a la brevedad.
+                    </div>
+                </form>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- CÓDIGO JAVASCRIPT: INTERACTIVIDAD, DESLIZAMIENTOS Y ENLACES DINÁMICOS -->
+    <!-- ===================================================================== -->
+    <script>
+        // 1. FUNCIÓN PARA CAMBIAR ENTRE LAS PESTAÑAS DEL MENÚ LATERAL
+        function cambiarVista(idVista, botonClicado) {
+            // Obtiene todas las secciones principales de la página
+            const secciones = document.querySelectorAll('.view-section');
+            // Recorre cada sección y le quita la clase 'active-view' para ocultarlas todas
+            secciones.forEach(sec => sec.classList.remove('active-view'));
+
+            // Muestra únicamente la sección cuyo ID coincide con el botón presionado
+            document.getElementById(idVista).classList.add('active-view');
+
+            // Obtiene todos los botones del menú lateral izquierdo
+            const botonesMenu = document.querySelectorAll('.nav-btn');
+            // Quita el resaltado azul ('active') de todos los botones
+            botonesMenu.forEach(btn => btn.classList.remove('active'));
+
+            // Activa el resaltado únicamente en el botón que el usuario presionó
+            botonClicado.classList.add('active');
+        }
+
+        // 2. FUNCIÓN PARA SELECCIONAR UN JUEGO Y ACTUALIZAR LOS BOTONES DE DESCARGA
+        function seleccionarJuego(tarjeta, grupoCarrusel) {
+            // Identifica el contenedor carrusel padre donde está la tarjeta seleccionada
+            const contenedorCarrusel = tarjeta.parentElement;
+            
+            // Busca todas las tarjetas dentro de ese mismo carrusel y les quita el borde azul
+            const tarjetasHermanas = contenedorCarrusel.querySelectorAll('.game-card');
+            tarjetasHermanas.forEach(card => card.classList.remove('selected'));
+
+            // Agrega la clase 'selected' (borde azul brillante) a la tarjeta clicada
+            tarjeta.classList.add('selected');
+
+            // Extrae los atributos personalizados 'data-*' escritos en el HTML de esa tarjeta
+            const titulo = tarjeta.getAttribute('data-title');   // Obtiene el título completo
+            const meta = tarjeta.getAttribute('data-meta');       // Obtiene peso e idioma
+            const imagen = tarjeta.getAttribute('data-img');     // Obtiene la URL de portada
+            const enlace1 = tarjeta.getAttribute('data-link1');  // Obtiene tu link principal
+            const enlace2 = tarjeta.getAttribute('data-link2');  // Obtiene tu link alternativo
+
+            // Actualiza la barra inferior correspondiente al grupo ('pc', 'accion' o 'retro')
+            document.getElementById(grupoCarrusel + '-dock-title').textContent = titulo;
+            document.getElementById(grupoCarrusel + '-dock-meta').textContent = meta;
+            document.getElementById(grupoCarrusel + '-dock-img').src = imagen;
+            
+            // Asigna tus enlaces reales a los botones <a> de descarga
+            document.getElementById(grupoCarrusel + '-dock-link1').href = enlace1;
+            document.getElementById(grupoCarrusel + '-dock-link2').href = enlace2;
+        }
+
+        // 3. FUNCIÓN PARA DESLIZAR HORIZONTALMENTE LOS CARRUSELES CON LOS BOTONES ◀ Y ▶
+        function deslizarCarrusel(idCarrusel, distanciaPixeles) {
+            // Localiza el carrusel específico por su ID
+            const carrusel = document.getElementById(idCarrusel);
+            // Desplaza el scroll horizontalmente sumando o restando los píxeles indicados
+            carrusel.scrollBy({
+                left: distanciaPixeles, // Valor negativo va a la izquierda, positivo a la derecha
+                behavior: 'smooth'      // Movimiento fluido animado
+            });
+        }
+
+        // 4. FUNCIÓN DE BÚSQUEDA EN TIEMPO REAL EN EL CATÁLOGO
+        function filtrarJuegos() {
+            // Obtiene el texto escrito en el buscador y lo convierte a minúsculas
+            const textoBusqueda = document.getElementById('buscadorJuegos').value.toLowerCase();
+            // Selecciona todas las tarjetas de juegos en la vista principal
+            const todasLasTarjetas = document.querySelectorAll('#vista-catalogo .game-card');
+
+            // Revisa cada tarjeta una por una
+            todasLasTarjetas.forEach(tarjeta => {
+                // Obtiene el título del juego en minúsculas
+                const nombreJuego = tarjeta.getAttribute('data-title').toLowerCase();
+                
+                // Si el nombre incluye lo que escribió el usuario, la muestra; si no, la oculta
+                if (nombreJuego.includes(textoBusqueda)) {
+                    tarjeta.style.display = 'block';
+                } else {
+                    tarjeta.style.display = 'none';
+                }
+            });
+        }
+
+        // 5. FUNCIÓN PARA SIMULAR EL ENVÍO DE LOS FORMULARIOS DE SUGERENCIAS Y CONTACTO
+        function enviarFormulario(evento, idMensajeConfirmacion) {
+            // Evita que la página se recargue al enviar el formulario
+            evento.preventDefault();
+            
+            // Muestra el mensaje verde de confirmación
+            const alerta = document.getElementById(idMensajeConfirmacion);
+            alerta.style.display = 'block';
+
+            // Limpia los campos escritos del formulario
+            evento.target.reset();
+
+            // Oculta automáticamente el mensaje verde después de 5 segundos
+            setTimeout(() => {
+                alerta.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+
+</body>
+<!-- Finaliza el documento HTML -->
+</html>
